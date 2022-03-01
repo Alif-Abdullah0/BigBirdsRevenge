@@ -1,3 +1,4 @@
-BigBirdsRevenge
+# Team Name: Big Birds
+## Project Name: BigBirdsRevenge
 
-p2 for softdev
+P02 for SoftDev
