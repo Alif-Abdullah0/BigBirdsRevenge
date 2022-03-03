@@ -84,6 +84,16 @@ def logout():
     """
     session.pop('username', default=None)
     return redirect("/")
+    
+@app.route("/save", methods=['GET','POST'])
+def save():
+    return str(request.form) + "<br>" + str(request.args);
+    
+@app.route("/test")
+def test():
+    return """
+    <!DOCTYPE html> <body> <script src='static/save.js'></script> </body> </html>
+    """;
 
 if __name__ == "__main__":
     app.debug = True;
