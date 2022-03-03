@@ -4,7 +4,7 @@
 # 2022-03-02
 
 import sqlite3, json, os
-from flask import Flask, render_template, request, redirect
+from flask import Flask, render_template, request, redirect, Response, session
 
 
 app = Flask(__name__)
@@ -26,7 +26,10 @@ db.close()
 
 @app.route("/")
 def index():
-    return "Hello World";
+    if 'username' in session:
+        return "Hello, " + session['username'] + "!";
+    else:
+        return "Hello World";
        
 @app.route("/login", methods=['GET','POST'])
 def login():
@@ -34,17 +37,19 @@ def login():
         Lets user log in
     """
     if request.method == 'GET':
-        return """<!DOCTYPE html> <html> <body> <form action="/signup" method="POST"> Username: <input type='text' name='username'> <br> <br> Password: <input type='text' name='password'> <br> <br> <input type='submit' value='Submit'> </form></body> </html>
+        return """<!DOCTYPE html> <html> <body> <form action="/login" method="POST"> Username: <input type='text' name='username'> <br> <br> Password: <input type='text' name='password'> <br> <br> <input type='submit' value='Submit'> </form></body> </html>
         """;
     else:
-        return "POST";
+        #return "POST";
         db = sqlite3.connect(MAIN_DB);
         c = db.cursor();
-        c.execute("""SELECT hash FROM users WHERE USERNAME = ?""", (request.form.get('username'),));
+        c.execute("""SELECT hash FROM users WHERE USERNAME = ?;""", (request.form.get('username'),));
         correct = c.fetchone();
         if correct == None:
             return 'No such user exists!';
-        if correct != request.form.get('password'):
+        print(correct[0]);
+        print(request.form.get('password'));
+        if correct[0] != request.form.get('password'):
             return 'Incorrect password!';
         session['username'] = request.form.get('username');
         return redirect('/');
@@ -66,11 +71,11 @@ def signup():
         passw = request.form.get('password');
         db = sqlite3.connect(MAIN_DB);
         c = db.cursor();
-        c.execute("""SELECT * FROM users WHERE USERNAME = ?""", (user,));
+        c.execute("""SELECT * FROM users WHERE USERNAME = ?;""", (user,));
         if c.fetchone() != None:
             return 'Username already exists!';
         if user.isalnum() and not (' ' in passw or '\\' in passw):
-            c.execute("""INSERT INTO users (username,hash) VALUES (?,?)""", (user, passw,));
+            c.execute("""INSERT INTO users (username,hash) VALUES (?,?);""", (user, passw,));
             db.commit();
             return redirect('/login');
         else:
@@ -87,12 +92,42 @@ def logout():
     
 @app.route("/save", methods=['GET','POST'])
 def save():
-    return str(request.form) + "<br>" + str(request.args);
+    d = request.form.get('save');
+    savedata = json.loads(d);
+    print(savedata);
     
+    if 'username' not in session:
+        return Response(json.dumps({'Status' : 'bad', 'Message' : 'You are not logged in!'}), content_type='application/json');
+    
+    db = sqlite3.connect(MAIN_DB);
+    c = db.cursor();
+    c.execute("""SELECT ROWID FROM users WHERE username = ?;""", (session['username'],));
+    filename = "saves/" + str(c.fetchone()[0]) + ".txt";
+    db.close()
+    f = open(filename, 'w')
+    f.write(d);
+    f.close()
+    print(filename);
+    return Response(json.dumps({'status' : 'good', 'message' : 'Saved!'}), content_type='application/json');
+
+@app.route("/load")
+def load():
+    if 'username' not in session:
+        return Response(json.dumps({'status' : 'bad', 'message' : 'You are not logged in!'}), content_type='application/json');
+    db = sqlite3.connect(MAIN_DB);
+    c = db.cursor();
+    c.execute("""SELECT ROWID FROM users WHERE username = ?;""", (session['username'],));
+    filename = "saves/" + str(c.fetchone()[0]) + ".txt";
+    db.close()
+    f = open(filename, 'r')
+    contents = f.read();
+    f.close();
+    return Response(json.dumps({'status' : 'good', 'message' : 'Saved!', 'save' : contents}), content_type='application/json');
+ 
 @app.route("/test")
 def test():
     return """
-    <!DOCTYPE html> <body> <script src='static/save.js'></script> </body> </html>
+    <!DOCTYPE html> <body> <canvas style="border : 1px solid black" id="drawing" width="800" height="600"> </canvas> <script type='application/javascript' src='static/save.js'></script> </body> </html>
     """;
 
 if __name__ == "__main__":
