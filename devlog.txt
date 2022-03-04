@@ -1,3 +1,8 @@
+Big Birds - Alif "Da Leaf Blower" Abdullah, William Chen, Sophie Liu, Cameron Nelson
+SoftDev
+P02 - Big Birds Revenge
+2022-02-03
+ 
 cameronN -- 03/02/22 11:14
-wrote basic code for saving game data 
+wrote basic code for saving game data
 made canvas show on /test
