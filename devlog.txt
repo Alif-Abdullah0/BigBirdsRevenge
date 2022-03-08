@@ -15,3 +15,6 @@ clarified member assignments, specified ship date and front end framework and li
 
 alifA -- 03/08/22 09:14
 Updated README.md to comply with assignment (due date 3/9/22) specifications
+
+sophieL -- 03/08/22 09:14
+added a rudimentary site map and mock-up website to the devlog. 
