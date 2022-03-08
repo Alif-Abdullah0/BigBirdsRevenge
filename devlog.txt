@@ -9,3 +9,6 @@ made canvas show on /test
 
 alifA -- 03/05/22 13:34
 pushed design doc onto BigBirds revenge GitHub repo
+
+alifA -- 03/07/22 20:40
+clarified member assignments, specified ship date and front end framework and listed program compenent section in greater detail of design doc. 
