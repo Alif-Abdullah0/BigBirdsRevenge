@@ -1,3 +1,20 @@
+Big Birds - Alif "Da Leaf Blower" Abdullah, William Chen, Sophie Liu, Cameron Nelson
+SoftDev
+P02 - Big Birds Revenge
+2022-02-03
+ 
 cameronN -- 03/02/22 11:14
-wrote basic code for saving game data 
+wrote basic code for saving game data
 made canvas show on /test
+
+alifA -- 03/05/22 13:34
+pushed design doc onto BigBirds revenge GitHub repo
+
+alifA -- 03/07/22 20:40
+clarified member assignments, specified ship date and front end framework and listed program compenent section in greater detail of design doc. 
+
+alifA -- 03/08/22 09:14
+Updated README.md to comply with assignment (due date 3/9/22) specifications
+
+sophieL -- 03/08/22 09:14
+added a rudimentary site map and mock-up website to the devlog. 
