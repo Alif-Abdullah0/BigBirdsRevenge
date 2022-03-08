@@ -37,8 +37,7 @@ def login():
         Lets user log in
     """
     if request.method == 'GET':
-        return """<!DOCTYPE html> <html> <body> <form action="/login" method="POST"> Username: <input type='text' name='username'> <br> <br> Password: <input type='text' name='password'> <br> <br> <input type='submit' value='Submit'> </form></body> </html>
-        """;
+        return render_template('login.html',name='Login');
     else:
         #return "POST";
         db = sqlite3.connect(MAIN_DB);
@@ -60,8 +59,7 @@ def signup():
         Signs up user
     """
     if request.method == 'GET':
-        return """<!DOCTYPE html> <html> <body> <form action="/signup" method="POST"> Username: <input type='text' name='username'> <br> <br> Password: <input type='text' name='password'> <br> <br> <input type='submit' value='Submit'> </form></body> </html>
-        """;
+        return render_template('login.html',name='Sign Up');
     else:
         if not ('username' in request.form):
             return 'Username required!';
