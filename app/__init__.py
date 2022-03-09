@@ -30,7 +30,7 @@ def index():
         return "Hello, " + session['username'] + "!";
     else:
         return "Hello World";
-       
+
 @app.route("/login", methods=['GET','POST'])
 def login():
     """
@@ -52,7 +52,7 @@ def login():
             return 'Incorrect password!';
         session['username'] = request.form.get('username');
         return redirect('/');
-    
+
 @app.route("/signup", methods=['GET','POST'])
 def signup():
     """
@@ -87,16 +87,16 @@ def logout():
     """
     session.pop('username', default=None)
     return redirect("/")
-    
+
 @app.route("/save", methods=['GET','POST'])
 def save():
     d = request.form.get('save');
     savedata = json.loads(d);
     print(savedata);
-    
+
     if 'username' not in session:
         return Response(json.dumps({'Status' : 'bad', 'Message' : 'You are not logged in!'}), content_type='application/json');
-    
+
     db = sqlite3.connect(MAIN_DB);
     c = db.cursor();
     c.execute("""SELECT ROWID FROM users WHERE username = ?;""", (session['username'],));
@@ -121,11 +121,11 @@ def load():
     contents = f.read();
     f.close();
     return Response(json.dumps({'status' : 'good', 'message' : 'Saved!', 'save' : contents}), content_type='application/json');
- 
+
 @app.route("/test")
 def test():
     return """
-    <!DOCTYPE html> <body> <canvas style="border : 1px solid black" id="drawing" width="800" height="600"> </canvas> <script type='application/javascript' src='static/save.js'></script> </body> </html>
+    <!DOCTYPE html> <body> <canvas style="border : 1px solid black" id="drawing" width="800" height="600"> </canvas> <script type='application/javascript' src='static/js/save.js'></script> </body> </html>
     """;
 
 if __name__ == "__main__":
