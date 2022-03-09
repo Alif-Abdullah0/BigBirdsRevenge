@@ -26,11 +26,8 @@ db.close()
 
 @app.route("/")
 def index():
-    if 'username' in session:
-        return "Hello, " + session['username'] + "!";
-    else:
-        return "Hello World";
-
+    return render_template("game.html",user=session.get('username'));
+    
 @app.route("/login", methods=['GET','POST'])
 def login():
     """
