@@ -6,38 +6,40 @@
 {% endblock %}
 
 {% block content %}
-<main class="form-signin" style="background-image:url('/static/images/pizzeria.jpg');position:fixed;left:0%;top:0%;right:0%;bottom:0%;">
+<main class="form-signin" style="background-image:url('/static/images/pizzeria.jpg');background-size: 100% 100%;position:fixed;left:0%;top:0%;right:0%;bottom:0%;">
 <div style="margin-top:6%;">
   <form method="POST" action="{{ action }}">
-    {% if error %}
-    <h1 class="h3 mb-3 fw-normal text-danger">{{ error }}</h1>
-    {% else %} {% if success %}
-    <h1 class="h3 mb-3 fw-normal text-success">{{ error }}</h1>
-    {% endif %}
-    <h1 class="h3 mb-3 fw-normal">Please {{ name }}</h1>
-    {% endif %}
-    <div class="form-floating">
-      <input
-        class="form-control"
-        id="floatingInput"
-        name="username"
-        placeholder="Username"
-      />
-      <label for="floatingInput"> Username </label>
-    </div>
-    <div class="form-floating">
-      <input
-        type="password"
-        class="form-control"
-        id="floatingPassword"
-        name="password"
-        placeholder="Password"
-      />
-      <label for="floatingPassword">Password</label>
-    </div>
-    <button class="w-100 btn btn-lg btn-primary" type="submit">
-      {{ name }}
-    </button>
+	<div style="margin:auto;width:80%;">
+		{% if error %}
+		<h1 class="h3 mb-3 fw-normal text-danger">{{ error }}</h1>
+		{% else %} {% if success %}
+		<h1 class="h3 mb-3 fw-normal text-success">{{ error }}</h1>
+		{% endif %}
+		<h1 class="h3 mb-3 fw-normal" style="color:white;">Please {{ name }}</h1>
+		{% endif %}
+		<div class="form-floating">
+		  <input
+			class="form-control"
+			id="floatingInput"
+			name="username"
+			placeholder="Username"
+		  />
+		  <label for="floatingInput"> Username </label>
+		</div>
+		<div class="form-floating" style="padding:3px;">
+		  <input
+			type="password"
+			class="form-control"
+			id="floatingPassword"
+			name="password"
+			placeholder="Password"
+		  />
+		  <label for="floatingPassword">Password</label>
+		</div>
+		<button class="w-50 btn btn-lg btn-primary" style="margin:auto;" type="submit">
+			{{ name }}
+		</button>
+	</div>
   </form>
 </div>
 </main>
