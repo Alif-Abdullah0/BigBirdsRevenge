@@ -2,14 +2,13 @@
 {% block title %}{{ name }}{% endblock %}
 {% block head %}
 {{ super() }}
-<link href="/static/css/signin.css" rel="stylesheet" />
 {% endblock %}
 
 {% block content %}
 <main class="form-signin" style="background-image:url('/static/images/pizzeria.jpg');background-size: 100% 100%;position:fixed;left:0%;top:0%;right:0%;bottom:0%;">
 <div style="margin-top:6%;">
   <form method="POST" action="{{ action }}">
-	<div style="margin:auto;width:80%;">
+	<div style="margin:auto;width:75%;">
 		{% if error %}
 		<h1 class="h3 mb-3 fw-normal text-danger">{{ error }}</h1>
 		{% else %} {% if success %}
@@ -36,7 +35,7 @@
 		  />
 		  <label for="floatingPassword">Password</label>
 		</div>
-		<button class="w-50 btn btn-lg btn-primary" style="margin:auto;" type="submit">
+		<button class="w-50 btn btn-lg btn-primary" style="margin-left:25%;" type="submit">
 			{{ name }}
 		</button>
 	</div>

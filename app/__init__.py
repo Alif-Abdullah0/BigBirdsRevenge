@@ -26,11 +26,8 @@ db.close()
 
 @app.route("/")
 def index():
-    if 'username' in session:
-        return "Hello, " + session['username'] + "!";
-    else:
-        return "Hello World";
-       
+    return render_template("game.html",user=session.get('username'));
+    
 @app.route("/login", methods=['GET','POST'])
 def login():
     """
@@ -45,14 +42,14 @@ def login():
         c.execute("""SELECT hash FROM users WHERE USERNAME = ?;""", (request.form.get('username'),));
         correct = c.fetchone();
         if correct == None:
-            return 'No such user exists!';
+            return render_template('login.html',name='Sign Up', error='No such user exists!');
         print(correct[0]);
         print(request.form.get('password'));
         if correct[0] != request.form.get('password'):
-            return 'Incorrect password!';
+            return render_template('login.html',name='Sign Up', error='Incorrect password!');
         session['username'] = request.form.get('username');
         return redirect('/');
-    
+
 @app.route("/signup", methods=['GET','POST'])
 def signup():
     """
@@ -62,16 +59,16 @@ def signup():
         return render_template('login.html',name='Sign Up');
     else:
         if not ('username' in request.form):
-            return 'Username required!';
+            return render_template('login.html',name='Sign Up', error='Username required!');
         if not ('password' in request.form):
-            return 'Password required!';
+            return render_template('login.html',name='Sign Up', error='Password required!');
         user = request.form.get('username');
         passw = request.form.get('password');
         db = sqlite3.connect(MAIN_DB);
         c = db.cursor();
         c.execute("""SELECT * FROM users WHERE USERNAME = ?;""", (user,));
         if c.fetchone() != None:
-            return 'Username already exists!';
+            return render_template('login.html',name='Sign Up', error='Username already exists!');
         if user.isalnum() and not (' ' in passw or '\\' in passw):
             c.execute("""INSERT INTO users (username,hash) VALUES (?,?);""", (user, passw,));
             db.commit();
@@ -87,20 +84,20 @@ def logout():
     """
     session.pop('username', default=None)
     return redirect("/")
-    
+
 @app.route("/save", methods=['GET','POST'])
 def save():
     d = request.form.get('save');
     savedata = json.loads(d);
     print(savedata);
-    
+
     if 'username' not in session:
         return Response(json.dumps({'Status' : 'bad', 'Message' : 'You are not logged in!'}), content_type='application/json');
-    
+
     db = sqlite3.connect(MAIN_DB);
     c = db.cursor();
     c.execute("""SELECT ROWID FROM users WHERE username = ?;""", (session['username'],));
-    filename = "saves/" + str(c.fetchone()[0]) + ".txt";
+    filename = "saves/" + str(c.fetchone()[0]) + ".json";
     db.close()
     f = open(filename, 'w')
     f.write(d);
@@ -115,17 +112,17 @@ def load():
     db = sqlite3.connect(MAIN_DB);
     c = db.cursor();
     c.execute("""SELECT ROWID FROM users WHERE username = ?;""", (session['username'],));
-    filename = "saves/" + str(c.fetchone()[0]) + ".txt";
+    filename = "saves/" + str(c.fetchone()[0]) + ".json";
     db.close()
     f = open(filename, 'r')
     contents = f.read();
     f.close();
     return Response(json.dumps({'status' : 'good', 'message' : 'Saved!', 'save' : contents}), content_type='application/json');
- 
+
 @app.route("/test")
 def test():
     return """
-    <!DOCTYPE html> <body> <canvas style="border : 1px solid black" id="drawing" width="800" height="600"> </canvas> <script type='application/javascript' src='static/save.js'></script> </body> </html>
+    <!DOCTYPE html> <body> <canvas style="border : 1px solid black" id="drawing" width="800" height="600"> </canvas> <script type='application/javascript' src='static/js/save.js'></script> </body> </html>
     """;
 
 if __name__ == "__main__":

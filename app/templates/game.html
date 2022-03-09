@@ -1,0 +1,13 @@
+{% extends "layout.html" %}
+{% block title %} {{name}} {% endblock %}
+{% block head %} {{ super() }} {% endblock %}
+
+{% block content %}
+<main style="margin-top:4%;">
+	<center>
+		<canvas style="border:1px solid black;" id="drawing" width="800" height="600"> </canvas>
+	</center>
+	<script type='application/javascript' src='/static/js/save.js'></script>
+	<script type='application/javascript' src='/static/js/game.js'></script>
+</main>
+{% endblock %}
