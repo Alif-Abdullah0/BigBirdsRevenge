@@ -26,7 +26,16 @@ db.close()
 
 @app.route("/")
 def index():
-    return render_template("game.html",user=session.get('username'));
+    save = False;
+    if 'username' in session:
+        db = sqlite3.connect(MAIN_DB);
+        c = db.cursor();
+        c.execute("""SELECT ROWID FROM users WHERE username = ?;""", (session['username'],));
+        filename = "saves/" + str(c.fetchone()[0]) + ".json";
+        db.close();
+        if os.path.exists(filename):
+            save = True;
+    return render_template("game.html",user=session.get('username'), saveavailable=save);
     
 @app.route("/login", methods=['GET','POST'])
 def login():
@@ -114,6 +123,8 @@ def load():
     c.execute("""SELECT ROWID FROM users WHERE username = ?;""", (session['username'],));
     filename = "saves/" + str(c.fetchone()[0]) + ".json";
     db.close()
+    if not os.path.exists(filename):
+        return Response(json.dumps({'status' : 'bad', 'message' : 'No saved game available!'}), content_type='application/json');
     f = open(filename, 'r')
     contents = f.read();
     f.close();

@@ -36,26 +36,19 @@ async function load() {
     loadRequest()
 	.then(data => {
 	    console.log(data.valueOf());
-	    savedata = JSON.parse(data.save);
+		if (data.status == 'good') {
+			savedata = JSON.parse(data.save);
+		} else {
+			console.log('No saved game!');
+		}
 	});
 }
 
-var c = document.getElementById("drawing");
-var ctx = c.getContext("2d");
-
 var savedata = {money : 1000, layout : [[5,5,"table"]]};
-var requestID;
 
-
-
-var size = 200; 
-var growing = true;
-
-function draw() { 
-    ctx.font = "72px Calibri"
-    ctx.fillText("Hello World!", 200, 300);
-    
-    requestID = window.requestAnimationFrame(draw);
+if (promptSave) {
+	let c = confirm("Would you like to load your previously saved game?");
+	if (c) {
+		load();
+	}
 }
-
-requestID = window.requestAnimationFrame(draw);

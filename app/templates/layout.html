@@ -11,7 +11,7 @@
       integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3"
       crossorigin="anonymous"
     />
-    <link href="/static/css/main.css" rel="stylesheet" />
+    <!-- <link href="/static/css/main.css" rel="stylesheet" /> -->
     <title>{% block title %}{% endblock %}</title>
     {% endblock %}
   </head>
@@ -41,7 +41,7 @@
             <ul class="navbar-nav mr-auto mb-2 mb-md-0">
               {% if user %}
               <li class="nav-item">
-                <a class="nav-link" href="/profile">{{ user }}</a>
+                <div class="nav-link">{{ user }}</div>
               </li>
               <li class="nav-item">
                 <a class="nav-link" href="/logout">Logout</a>
