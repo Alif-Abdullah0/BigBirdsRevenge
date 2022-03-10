@@ -44,11 +44,8 @@ async function load() {
 	});
 }
 
-var savedata = {money : 1000, layout : [[5,5,"table"]]};
-
 if (promptSave) {
-	let c = confirm("Would you like to load your previously saved game?");
-	if (c) {
+	if (confirm("Would you like to load your previously saved game?")) {
 		load();
 	}
 }
