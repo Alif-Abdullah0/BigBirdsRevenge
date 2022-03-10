@@ -4,10 +4,13 @@
 
 {% block content %}
 <main style="margin-top:4%;">
+	<div style="height:600px;display:flex;flex-direction:column;align-items:center;flex-wrap:wrap;">
+	<h1 id="money-counter" style="border-left: 14px solid red; border-radius:12px; padding: 5px; background-color:lightgray;"> Money Counter:  </h1>
 	<center>
 		<canvas style="border:1px solid black;" id="drawing" width="800" height="600"> </canvas>
 	</center>
-	<script> 
+	</div>
+	<script>
 		var promptSave = {% if saveavailable %}true{% else %}false{% endif %};
 	</script>
 	<script type='application/javascript' src='/static/js/save.js'></script>
