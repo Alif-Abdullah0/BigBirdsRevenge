@@ -1,6 +1,7 @@
 function Customer(order) {
   this.order = order;
   this.happy = 1;
+  this.table =
 };
 
 function customer_tip(customer) {
@@ -13,8 +14,17 @@ function Server() {
   this.tableNum = -1;
 };
 
-function Server_serve(server, tableNum, item) {
+function Server_serve(server, table, item) {
   server.holding = item;
   server.task = true;
-  server.tableNum = tableNum;
+  server.tableNum = table;
+}
+
+function Server_takeOrder(server, table) {
+  orders = cust_getOrder(chair_Cust(table_Chairs(table)));
+  return orders;
+}
+
+function make_Food(orders) {
+  
 }
