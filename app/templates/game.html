@@ -4,8 +4,10 @@
 
 {% block content %}
 <main style="margin-top:4%;">
-	<div style="height:600px;display:flex;flex-direction:column;align-items:center;flex-wrap:wrap;">
-	<h1 id="money-counter" style="border-left: 14px solid red; border-radius:12px; padding: 5px; background-color:lightgray;"> Money Counter:  </h1>
+	<div style="height:600px;display:flex;flex-direction:row;align-items:stretch;justify-content:space-around;">
+	<div style="display:flex;flex-direction:column;justify-content:flex-start;">
+	<h1 id="money-counter" style="border-left: 14px solid red; border-radius:12px; padding: 5px; background-color:lightgray;margin-top:5%;"> Money Counter: $xxxx  </h1>
+	</div>
 	<center>
 		<canvas style="border:1px solid black;" id="drawing" width="800" height="600"> </canvas>
 	</center>

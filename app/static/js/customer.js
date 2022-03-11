@@ -1,18 +1,18 @@
 function Customer(order) {
   this.order = order;
   this.happy = 1;
-  this.tip = function () {
-    return "test" + this.happy;
-  };
+  this.shirtColor = ['#ff0000', '#ffff00', '#00ff00'][Math.floor(Math.random() * 3)];
 };
+
 
 function Server() {
   this.holding;
   this.task = false;
   this.tableNum = -1;
-  this.serve = function (tableNum, item) {
-    this.holding = item;
-    this.task = true;
-    this.tableNum = tableNum;
-  };
 };
+
+function Server_serve(server, tableNum, item) {
+    server.holding = item;
+    server.task = true;
+    server.tableNum = tableNum;
+  };
