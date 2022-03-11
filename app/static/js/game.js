@@ -1,7 +1,16 @@
+// gets the canvas
 var c = document.getElementById('drawing');
 var ctx = c.getContext("2d");
+
+// for animations
 var requestID;
 
+/** Stores data from the game
+	- Money counter: the money the player has
+	- Layout: the layout of the restaurant, with its tables and chairs
+	- grid: for the grid lines
+	- people: to store the locations of the people in the restaurant
+*/
 var savedata = {money : 1000, layout : [], grid : Array(600/25), people : []};
 for (let i = 0; i < savedata.grid.length; i++) {
 	savedata.grid[i] = Array(800/25);
@@ -36,7 +45,7 @@ function nextframe() {
 	if (drawGridBoolean) {
 		drawGrid();
 	}
-	
+
 	requestID = window.requestAnimationFrame(nextframe);
 }
 
@@ -55,7 +64,7 @@ function drawGrid() {
 	for (drawGrid_index = 0; drawGrid_index < savedata.grid[0].length - 1; drawGrid_index++) {
 		ctx.moveTo(drawGrid_index * 25 + 24.5, 0);
 		ctx.lineTo(drawGrid_index * 25 + 24.5, c.clientHeight);
-	}	
+	}
 	ctx.strokeStyle = '#aaaaaa';
 	ctx.stroke();
 }
@@ -76,7 +85,7 @@ function Furniture(x, y, type, rotation = 3 /* facing west */) {
 	this.name = type;
 	this.direction = rotation;
 	switch (type) {
-		case 'table': 
+		case 'table':
 			this.id = 0;
 			break;
 		case 'chair':
@@ -86,7 +95,7 @@ function Furniture(x, y, type, rotation = 3 /* facing west */) {
 			this.id = 2;
 			break;
 		default:
-			this.id = -1;	
+			this.id = -1;
 			break;
 	}
 }
@@ -101,4 +110,3 @@ function startgame() {
 }
 
 startgame();
-
