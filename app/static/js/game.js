@@ -31,12 +31,16 @@ function nextframe() {
 			case 2:
 				ctx.setTransform(1, 0, 0, 1, 0, 0);
 				break;
+			case 3:
+				ctx.fillStyle = '#8E8E8E';
+				ctx.fillRect(object.x * 25, object.y * 25, 25, 25);
+				break;
 		}
 	}
 	if (drawGridBoolean) {
 		drawGrid();
 	}
-	
+
 	requestID = window.requestAnimationFrame(nextframe);
 }
 
@@ -55,7 +59,7 @@ function drawGrid() {
 	for (drawGrid_index = 0; drawGrid_index < savedata.grid[0].length - 1; drawGrid_index++) {
 		ctx.moveTo(drawGrid_index * 25 + 24.5, 0);
 		ctx.lineTo(drawGrid_index * 25 + 24.5, c.clientHeight);
-	}	
+	}
 	ctx.strokeStyle = '#aaaaaa';
 	ctx.stroke();
 }
@@ -76,7 +80,7 @@ function Furniture(x, y, type, rotation = 3 /* facing west */) {
 	this.name = type;
 	this.direction = rotation;
 	switch (type) {
-		case 'table': 
+		case 'table':
 			this.id = 0;
 			break;
 		case 'chair':
@@ -85,8 +89,12 @@ function Furniture(x, y, type, rotation = 3 /* facing west */) {
 		case 'hostess_table':
 			this.id = 2;
 			break;
+		case 'kitchen':
+			this.id = 3;
+			this.holding = NULL;
+			break;
 		default:
-			this.id = -1;	
+			this.id = -1;
 			break;
 	}
 }
@@ -97,8 +105,8 @@ function startgame() {
 	Build(new Furniture(6,5,'chair'));
 	Build(new Furniture(5,4,'chair'));
 	Build(new Furniture(5,6,'chair'));
+
 	window.requestAnimationFrame(nextframe);
 }
 
 startgame();
-
