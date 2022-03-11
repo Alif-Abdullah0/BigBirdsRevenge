@@ -1,7 +1,16 @@
+// gets the canvas
 var c = document.getElementById('drawing');
 var ctx = c.getContext("2d");
+
+// for animations
 var requestID;
 
+/** Stores data from the game
+	- Money counter: the money the player has
+	- Layout: the layout of the restaurant, with its tables and chairs
+	- grid: for the grid lines
+	- people: to store the locations of the people in the restaurant
+*/
 var savedata = {money : 1000, layout : [], grid : Array(600/25), people : []};
 for (let i = 0; i < savedata.grid.length; i++) {
 	savedata.grid[i] = Array(800/25);
