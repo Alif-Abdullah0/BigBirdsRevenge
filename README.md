@@ -34,7 +34,7 @@ If that works, your terminal should appear as follows:
 ```(myherouno) $```
 
 Install project dependencies in virtual environment:
-```pip install -r BigBirdsRevenge/app/requirements.txt```
+```pip install -r BigBirdsRevenge/requirements.txt```
 
 Run the actual program:
 ```python3 BigBirdsRevenge/app/__init__.py```
