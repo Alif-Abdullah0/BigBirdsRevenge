@@ -26,5 +26,5 @@ function Server_takeOrder(server, table) {
 }
 
 function make_Food(orders) {
-  
+
 }
