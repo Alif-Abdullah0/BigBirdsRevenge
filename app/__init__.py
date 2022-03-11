@@ -52,8 +52,6 @@ def login():
         correct = c.fetchone();
         if correct == None:
             return render_template('login.html',name='Sign Up', error='No such user exists!');
-        print(correct[0]);
-        print(request.form.get('password'));
         if correct[0] != request.form.get('password'):
             return render_template('login.html',name='Sign Up', error='Incorrect password!');
         session['username'] = request.form.get('username');
@@ -83,7 +81,7 @@ def signup():
             db.commit();
             return redirect('/login');
         else:
-            return 'No spaces or backslashes in usernames!';
+            return render_template('login.html',name='Sign Up', error='No spaces or backslashes in usernames!');
         return "POST";
 
 @app.route("/logout")

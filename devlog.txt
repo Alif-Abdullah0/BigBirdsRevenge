@@ -21,4 +21,3 @@ added a rudimentary site map and mock-up website to the devlog.
 
 alifA -- 03/10/22 21:37
 added and styled money counter element to act as the money counter in our game
-updated README to contain launch codes
