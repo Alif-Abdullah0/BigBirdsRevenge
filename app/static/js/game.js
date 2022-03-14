@@ -4,9 +4,9 @@ const ctx = c.getContext("2d");
 
 const moneyCounter = document.getElementById('money-counter');
 const timeCounter = document.getElementById('time-counter');
-const loadButton = document.getElementById('saveButton');
+const loadButton = document.getElementById('loadButton');
 const saveButton = document.getElementById('saveButton');
-const toggleGridButton = document.getElementById('saveButton');
+const toggleGridButton = document.getElementById('toggleGridButton');
 
 // for animations
 var requestID;
@@ -127,9 +127,9 @@ function Furniture(x, y, type, rotation = 3 /* facing west */) {
 	}
 }
 
-loadButton.addEventListener('onclick', load);
-loadButton.addEventListener('onclick', save);
-toggleGridButton.addEventListener('onclick', () => {toggleGridButton = toggleGridButton ? false : true;});
+loadButton.addEventListener('click', load);
+loadButton.addEventListener('click', save);
+toggleGridButton.addEventListener('click', () => {drawGridBoolean = drawGridBoolean ? false : true;});
 
 function startgame() {
 	Build(new Furniture(5,5,'table'));
