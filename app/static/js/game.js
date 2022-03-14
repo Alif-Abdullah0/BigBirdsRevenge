@@ -56,7 +56,6 @@ function nextframe() {
 	if (drawGridBoolean) {
 		drawGrid();
 	}
-<<<<<<< HEAD
 	dummy = "$" + savedata.money;
 	while (dummy.length < 6) {
 		dummy = "&nbsp;" + dummy;
@@ -70,10 +69,6 @@ function nextframe() {
 			savedata.igt[1] = 0;
 		}
 	}
-	
-=======
-
->>>>>>> cac4e56cb478416c9a5f7fd4d1d0d9489e1dfdd5
 	requestID = window.requestAnimationFrame(nextframe);
 }
 
