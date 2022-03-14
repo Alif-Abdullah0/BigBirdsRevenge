@@ -7,7 +7,7 @@ async function saveRequest(s) {
 	    'Content-Type': 'application/x-www-form-urlencoded',
         },
         body: new URLSearchParams({
-            save : JSON.stringify(s),
+            save : s,
 	}),
     };
     //console.log(request);
@@ -16,10 +16,13 @@ async function saveRequest(s) {
 }
 
 async function save() {
+	compactSaveData();
 	localStorage['save'] = JSON.stringify(savedata);
-    saveRequest(savedata)
+	console.log('Saved to localStorage!');
+	expandLoadedSave();
+    saveRequest(localStorage['save'])
 	.then(data => {
-	    console.log(data.valueOf());
+	    console.log("Server Response: ", data.valueOf());
 	});
 }
 
@@ -36,6 +39,7 @@ async function loadRequest() {
 async function load() {
 	if ('save' in localStorage) {
 		savedata = JSON.parse(localStorage['save']);
+		console.log('Loaded save from localStorage!');
 	} else {
 		loadRequest()
 		.then(data => {
@@ -47,10 +51,43 @@ async function load() {
 			}
 		});
 	}
+	expandLoadedSave();
 }
 
-if (promptSave) {
-	if (confirm("Would you like to load your previously saved game?")) {
-		load();
+function expandLoadedSave() {
+	savedata.grid = Array(600 / 25);
+	for (i = 0; i < savedata.grid.length; i++) {
+		savedata.grid[i] = Array(800 / 25);
 	}
+
+	let savelayout = savedata.layout;
+	savedata.layout = [];
+	for (i in savelayout) {
+		//console.log(savelayout[i]);
+		switch (savelayout[i].id) {
+			case 0:
+				createTable(savelayout[i].x, savelayout[i].y, true);
+				break;
+			case 1:
+				createChair(savelayout[i].x, savelayout[i].y, true);
+				break;
+			default:
+				console.error("Something went wrong");
+		}
+	}
+}
+
+function compactSaveData() {
+	for (i in savedata.layout) {
+		let elem = savedata.layout[i];
+		switch (elem.id) {
+			case 0:
+				delete elem.chairsAttached;
+				break;
+			case 1:
+				delete elem.tableOwner;
+				break;
+		}
+	}
+	delete savedata.grid;
 }

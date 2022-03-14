@@ -1,7 +1,7 @@
 function Customer(order) {
   this.order = order;
   this.happy = 1;
-  this.table =
+  this.table = null;
 };
 
 function customer_tip(customer) {
