@@ -1,4 +1,6 @@
 // gets the canvas
+var c = document.getElementById('drawing');
+var ctx = c.getContext("2d");
 const c = document.getElementById('drawing');
 const ctx = c.getContext("2d");
 
@@ -11,21 +13,23 @@ const toggleGridButton = document.getElementById('toggleGridButton');
 // for animations
 var requestID;
 
-/* Stores data from the game
+/** Stores data from the game
 	- Money counter: the money the player has
 	- Layout: the layout of the restaurant, with its tables and chairs
 	- grid: for the grid lines
 	- people: to store the locations of the people in the restaurant
 */
-var savedata = {money : 1000, layout : [], grid : Array(600/25), people : Object(), igt : [7, 0]};
+var savedata = {money : 1000, layout : [], grid : Array(600/25), people : []};
 for (let i = 0; i < savedata.grid.length; i++) {
 	savedata.grid[i] = Array(800/25);
 }
 
 var object;
 var drawGridBoolean = false;
-var dummy;
-var framesTillNextMinute = 60;
+
+/*
+	keep track of: current position, new position, color and shape.
+*/
 
 function nextframe() {
 	ctx.clearRect(0,0,c.clientWidth,c.clientHeight);
@@ -56,6 +60,7 @@ function nextframe() {
 	if (drawGridBoolean) {
 		drawGrid();
 	}
+
 	dummy = "$" + savedata.money;
 	while (dummy.length < 6) {
 		dummy = "&nbsp;" + dummy;
@@ -74,6 +79,7 @@ function nextframe() {
 
 function drawPeople() {
 	for (index in savedata.people) {
+
 	}
 }
 
