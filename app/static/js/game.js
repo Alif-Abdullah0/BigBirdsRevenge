@@ -134,7 +134,7 @@ function Furniture(x, y, type) {
 function createTable(x, y) {
 	let newtable = new Furniture(x, y, 'table');
 	if (Build(newtable) === 1) {return 1;}
-	
+
 	return 0;
 }
 
@@ -144,7 +144,7 @@ function createChair(x, y) {
 	if (x > 0 && savedata.grid[y][x-1] != null && savedata.grid[y][x-1].id === 0) {
 		newchair.tableConnected = savedata.grid[y][x-1];
 	}
-	
+
 	return 0;
 }
 
