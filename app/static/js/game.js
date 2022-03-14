@@ -17,7 +17,7 @@ var requestID;
 	- grid: for the grid lines
 	- people: to store the locations of the people in the restaurant
 */
-var savedata = {money : 1000, layout : [], grid : Array(600/25), people : []};
+var savedata = {money : 1000, layout : [], grid : Array(600/25), people : [], };
 for (let i = 0; i < savedata.grid.length; i++) {
 	savedata.grid[i] = Array(800/25);
 }
@@ -110,7 +110,6 @@ function Furniture(x, y, type) {
 	this.x = x;
 	this.y = y;
 	this.name = type;
-	this.direction = rotation;
 	switch (type) {
 		case 'table':
 			this.id = 0;
@@ -139,7 +138,11 @@ function createTable(x, y) {
 }
 
 function createChair(x, y) {
-	let newchair = new 
+	let newchair = new Furniture(x, y, 'chair');
+	if (Build(newtable) === 1)  {return 1;}
+	if (x > 0 && savedata.grid[y][x-1]
+	
+	return 0;
 }
 
 loadButton.addEventListener('click', load);
