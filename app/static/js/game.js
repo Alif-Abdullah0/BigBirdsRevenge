@@ -102,7 +102,7 @@ function Build(object) {
 	}
 }
 
-function Furniture(x, y, type, rotation = 3 /* facing west */) {
+function Furniture(x, y, type) {
 	this.x = x;
 	this.y = y;
 	this.name = type;
@@ -125,6 +125,17 @@ function Furniture(x, y, type, rotation = 3 /* facing west */) {
 			this.id = -1;
 			break;
 	}
+}
+
+function createTable(x, y) {
+	let newtable = new Furniture(x, y, 'table');
+	if (Build(newtable) === 1) {return 1;}
+	
+	return 0;
+}
+
+function createChair(x, y) {
+	let newchair = new 
 }
 
 loadButton.addEventListener('click', load);
