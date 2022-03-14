@@ -16,6 +16,7 @@ async function saveRequest(s) {
 }
 
 async function save() {
+	localStorage['save'] = savedata;
     saveRequest(savedata)
 	.then(data => {
 	    console.log(data.valueOf());
@@ -33,15 +34,19 @@ async function loadRequest() {
 }
 
 async function load() {
-    loadRequest()
-	.then(data => {
-	    console.log(data.valueOf());
-		if (data.status == 'good') {
-			savedata = JSON.parse(data.save);
-		} else {
-			console.log('No saved game!');
-		}
-	});
+	if ('save' in localStorage) {
+		savedata = localStorage['save'];
+	} else {
+		loadRequest()
+		.then(data => {
+			console.log(data.valueOf());
+			if (data.status == 'good') {
+				savedata = JSON.parse(data.save);
+			} else {
+				console.log('No saved game!');
+			}
+		});
+	}
 }
 
 if (promptSave) {

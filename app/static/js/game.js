@@ -1,15 +1,22 @@
-var c = document.getElementById('drawing');
-var ctx = c.getContext("2d");
+const c = document.getElementById('drawing');
+const ctx = c.getContext("2d");
+const moneyCounter = document.getElementById('money-counter');
+const timeCounter = document.getElementById('time-counter');
+const loadButton = document.getElementById('saveButton');
+const saveButton = document.getElementById('saveButton');
+const toggleGridButton = document.getElementById('saveButton');
+
 var requestID;
 
-var savedata = {money : 1000, layout : [], grid : Array(600/25), people : []};
+var savedata = {money : 1000, layout : [], grid : Array(600/25), people : Object(), igt : [7, 0]};
 for (let i = 0; i < savedata.grid.length; i++) {
 	savedata.grid[i] = Array(800/25);
 }
 
-
 var object;
 var drawGridBoolean = false;
+var dummy;
+var framesTillNextMinute = 60;
 
 function nextframe() {
 	ctx.clearRect(0,0,c.clientWidth,c.clientHeight);
@@ -35,6 +42,19 @@ function nextframe() {
 	}
 	if (drawGridBoolean) {
 		drawGrid();
+	}
+	dummy = "$" + savedata.money;
+	while (dummy.length < 6) {
+		dummy = "&nbsp;" + dummy;
+	}
+	moneyCounter.innerHTML = "Money:&nbsp;" + dummy;
+	timeCounter.innerHTML = "Time: " + (savedata.igt[0] < 10 ? '0' : '') + savedata.igt[0] + ':' + (savedata.igt[1] < 10 ? '0' : '') + savedata.igt[1] + " " + (savedata.igt[0] >= 7 && savedata.igt[0] < 19 ? '🌞' : '🌙');
+	if (framesTillNextMinute-- == 0) {
+		framesTillNextMinute = 60;
+		if (savedata.igt[1]++ >= 60) {
+			savedata.igt[0] = (savedata.igt[0] + 1) % 24;
+			savedata.igt[1] = 0;
+		}
 	}
 	
 	requestID = window.requestAnimationFrame(nextframe);
@@ -90,6 +110,10 @@ function Furniture(x, y, type, rotation = 3 /* facing west */) {
 			break;
 	}
 }
+
+loadButton.addEventListener('onclick', load);
+loadButton.addEventListener('onclick', save);
+toggleGridButton.addEventListener('onclick', () => {toggleGridButton = toggleGridButton ? false : true;});
 
 function startgame() {
 	Build(new Furniture(5,5,'table'));
