@@ -25,3 +25,6 @@ updated README to contain launch codes
 
 williamC -- 03/11/22 9:21
 Worked on people variables and attempted to figure out the logic they will follow
+
+sophieL -- 03/14/22 9:24
+Bugfixing stuff. game.js is a bit of a mess right now because it's so large that we keep getting merge conflicts. 
