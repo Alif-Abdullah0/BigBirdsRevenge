@@ -17,11 +17,7 @@ var requestID;
 	- grid: for the grid lines
 	- people: to store the locations of the people in the restaurant
 */
-<<<<<<< HEAD
-var savedata = {money : 1000, layout : [], grid : Array(600/25), people : [], };
-=======
 var savedata = {money : 1000, layout : [], grid : Array(600/25), people : [], igt : [7,0]};
->>>>>>> af5198ecbf1cfda3b97fdabdc9e57d8ef5d297bf
 for (let i = 0; i < savedata.grid.length; i++) {
 	savedata.grid[i] = Array(800/25);
 }
@@ -115,10 +111,6 @@ function Furniture(x, y, type) {
 	this.x = x;
 	this.y = y;
 	this.name = type;
-<<<<<<< HEAD
-=======
-	// this.direction = rotation;
->>>>>>> af5198ecbf1cfda3b97fdabdc9e57d8ef5d297bf
 	switch (type) {
 		case 'table':
 			this.id = 0;
@@ -157,7 +149,7 @@ function createChair(x, y) {
 }
 
 loadButton.addEventListener('click', load);
-loadButton.addEventListener('click', save);
+saveButton.addEventListener('click', save);
 toggleGridButton.addEventListener('click', () => {drawGridBoolean = drawGridBoolean ? false : true;});
 
 function startgame() {
