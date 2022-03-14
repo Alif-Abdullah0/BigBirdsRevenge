@@ -17,13 +17,14 @@ var requestID;
 	- grid: for the grid lines
 	- people: to store the locations of the people in the restaurant
 */
-var savedata = {money : 1000, layout : [], grid : Array(600/25), people : []};
+var savedata = {money : 1000, layout : [], grid : Array(600/25), people : [], igt : [7,0]};
 for (let i = 0; i < savedata.grid.length; i++) {
 	savedata.grid[i] = Array(800/25);
 }
 
 var object;
 var drawGridBoolean = false;
+var framesTillNextMinute = 30;
 
 /*
 	keep track of: current position, new position, color and shape.
@@ -110,7 +111,7 @@ function Furniture(x, y, type) {
 	this.x = x;
 	this.y = y;
 	this.name = type;
-	this.direction = rotation;
+	// this.direction = rotation;
 	switch (type) {
 		case 'table':
 			this.id = 0;
@@ -131,16 +132,16 @@ function Furniture(x, y, type) {
 	}
 }
 
-function createTable(x, y) {
-	let newtable = new Furniture(x, y, 'table');
-	if (Build(newtable) === 1) {return 1;}
-	
-	return 0;
-}
-
-function createChair(x, y) {
-	let newchair = new 
-}
+// function createTable(x, y) {
+// 	let newtable = new Furniture(x, y, 'table');
+// 	if (Build(newtable) === 1) {return 1;}
+//
+// 	return 0;
+// }
+//
+// function createChair(x, y) {
+// 	let newchair = new
+// }
 
 loadButton.addEventListener('click', load);
 loadButton.addEventListener('click', save);
