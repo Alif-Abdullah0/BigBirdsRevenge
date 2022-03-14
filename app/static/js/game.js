@@ -1,6 +1,4 @@
 // gets the canvas
-var c = document.getElementById('drawing');
-var ctx = c.getContext("2d");
 const c = document.getElementById('drawing');
 const ctx = c.getContext("2d");
 
