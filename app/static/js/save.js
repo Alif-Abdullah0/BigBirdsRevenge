@@ -16,7 +16,7 @@ async function saveRequest(s) {
 }
 
 async function save() {
-	localStorage['save'] = savedata;
+	localStorage['save'] = JSON.stringify(savedata);
     saveRequest(savedata)
 	.then(data => {
 	    console.log(data.valueOf());
@@ -35,7 +35,7 @@ async function loadRequest() {
 
 async function load() {
 	if ('save' in localStorage) {
-		savedata = localStorage['save'];
+		savedata = JSON.parse(localStorage['save']);
 	} else {
 		loadRequest()
 		.then(data => {
