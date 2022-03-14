@@ -17,11 +17,7 @@ var requestID;
 	- grid: for the grid lines
 	- people: to store the locations of the people in the restaurant
 */
-<<<<<<< HEAD
-var savedata = {money : 1000, layout : [], grid : Array(600/25), people : [], };
-=======
 var savedata = {money : 1000, layout : [], grid : Array(600/25), people : [], igt : [7,0]};
->>>>>>> af5198ecbf1cfda3b97fdabdc9e57d8ef5d297bf
 for (let i = 0; i < savedata.grid.length; i++) {
 	savedata.grid[i] = Array(800/25);
 }
@@ -142,7 +138,7 @@ function Furniture(x, y, type) {
 function createTable(x, y) {
 	let newtable = new Furniture(x, y, 'table');
 	if (Build(newtable) === 1) {return 1;}
-	
+
 	return 0;
 }
 
@@ -152,7 +148,7 @@ function createChair(x, y) {
 	if (x > 0 && savedata.grid[y][x-1] != null && savedata.grid[y][x-1].id === 0) {
 		newchair.tableConnected = savedata.grid[y][x-1];
 	}
-	
+
 	return 0;
 }
 
