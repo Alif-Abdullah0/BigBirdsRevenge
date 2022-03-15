@@ -9,7 +9,7 @@ function customer_tip(customer) {
 }
 
 function Server() {
-  this.holding = NULL;
+  this.holding = null;
   this.task = false;
   this.tableNum = -1;
 };
@@ -26,5 +26,5 @@ function Server_takeOrder(server, table) {
 }
 
 function make_Food(orders) {
-
+  console.log(savedata);
 }
