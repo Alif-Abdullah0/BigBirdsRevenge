@@ -7,6 +7,8 @@ const timeCounter = document.getElementById('time-counter');
 const loadButton = document.getElementById('loadButton');
 const saveButton = document.getElementById('saveButton');
 const toggleGridButton = document.getElementById('buildToggleButton');
+const searchQueryDiv = document.getElementById('searchQueryText');
+const searchResultsDiv = document.getElementById('searchResults');
 
 // for animations
 var requestID;
@@ -26,6 +28,15 @@ var object;
 var drawGridBoolean = false;
 var framesTillNextMinute = 60;
 var [cursorX, cursorY] = [Math.trunc(savedata.grid[0].length / 2), Math.trunc(savedata.grid.length / 2)];
+var searchingBoolean = false;
+var searching = '';
+
+const objectTypeList = [
+	/* id name constructor constructorArgs  */
+	[0, "table", createTable, ['x', 'y']],
+	[1, "chair", createChair, ['x', 'y']],
+	[2, "kitchen counter", createCounter, ['x', 'y']],
+];
 
 /*
 	keep track of: current position, new position, color and shape.
@@ -49,8 +60,6 @@ function nextframe() {
 				ctx.stroke();
 				break;
 			case 2:
-				break;
-			case 3:
 				ctx.fillStyle = '#8E8E8E';
 				ctx.fillRect(object.x * 25, object.y * 25, 25, 25);
 				break;
@@ -59,6 +68,12 @@ function nextframe() {
 	if (drawGridBoolean) {
 		drawGrid();
 		drawCursor();
+	}
+	if (searchingBoolean) {
+		searchQueryDiv.innerHTML = '<pre>🔎: <span style="text-decoration:underline;">' + searching + (framesTillNextMinute < 30 ? ' ' : '') + '</span></pre>';
+	} else {
+		searchQueryDiv.textContent = 'Press 0 to search objects';
+		searchResultsDiv.innerHTML = '';
 	}
 
 	dummy = "$" + savedata.money;
@@ -134,32 +149,28 @@ function Build(object) {
 	}
 }
 
-function FurniturePrototype(x, y, type) {
+function FurniturePrototype(x, y, id) {
 	this.x = x;
 	this.y = y;
-	this.name = type;
-	switch (type) {
-		case 'table':
-			this.id = 0;
+	this.id = id;
+	switch (id) {
+		case 0:
+			this.name = "table";
 			break;
-		case 'chair':
-			this.id = 1;
+		case 1:
+			this.name = "chair";
 			break;
-		case 'hostess_table':
-			this.id = 2;
-			break;
-		case 'kitchen':
-			this.id = 3;
-			this.holding = NULL;
+		case 2:
+			this.name = "kitchen";
 			break;
 		default:
-			this.id = -1;
+			this.name = "fuck";
 			break;
 	}
 }
 
 function createTable(x, y) {
-	let newtable = new FurniturePrototype(x, y, 'table');
+	let newtable = new FurniturePrototype(x, y, 0);
 	newtable.chairsAttached = [];
 	if (!canBuild(newtable)) {
 		return 1;
@@ -185,7 +196,7 @@ function createTable(x, y) {
 }
 
 function createChair(x, y, forcebuild) {
-	let newchair = new FurniturePrototype(x, y, 'chair');
+	let newchair = new FurniturePrototype(x, y, 1);
 	if (!canBuild(newchair)) {
 		return 1;
 	}
@@ -214,12 +225,47 @@ function createChair(x, y, forcebuild) {
 		if (!forcebuild && !confirm("This chair is not next to any table. Are you sure you want to build this?")) {return 2;}
 		newchair.tableOwner = null;
 	}
-	if (Build(newchair) === 1)  {return 1;}
+	if (Build(newchair) == 1)  {return 1;}
+	return 0;
+}
+
+function createCounter(x, y) {
+	if (y != savedata.grid.length - 1) {return 1;}
+
+	let newCounter = new FurniturePrototype(x, y, 2);
+	if (!canBuild(newCounter)) {return 1;}
+	newCounter.holding = undefined;
+
+	if (Build(newCounter) == 1) {return 1;}
 	return 0;
 }
 
 function ord(ch) {
 	return ch.charCodeAt(0);
+}
+
+function includesInArray(string, arr) {
+	for (let i = 0; i < arr.length; i++) {
+		if (arr[i].length != 0 && !string.includes(arr[i])) {
+			return false;
+		}
+	}
+	return true;
+}
+
+function genObjectSearchResults() {
+	searchResultsDiv.innerHTML = '<hr>';
+	let terms = searching.split(' ');
+	objectTypeList.forEach((objectDef, index) => {
+		let searchedFor = (searching.trim() == '') ? true : includesInArray(objectDef[1], terms);
+		if (searchedFor) {
+			//console.log(objectDef);
+			searchResultsDiv.innerHTML += "<p id=objectTypeDef_" + index + ">" + JSON.stringify(objectDef) + "</p><hr>";
+		}
+	});
+	if (searchResultsDiv.childElementCount == 1) {
+		searchResultsDiv.innerHTML += "<p>No results for '" + searching.trimEnd() + "'.</p><hr>";
+	}
 }
 
 loadButton.addEventListener('click', load);
@@ -234,45 +280,51 @@ c.addEventListener('click', (e) => {
 	}
 });
 document.addEventListener('keydown', (e) => {
-	switch(e.keyCode) {
-		case ord('W'):
-		case 38: /* Up */
-			cursorY = Math.max(cursorY - 1, 0);
-			break;
-		case ord('A'):
-		case 37: /* Left */
-			cursorX = Math.max(cursorX - 1, 0);
-			break;
-		case ord('S'):
-		case 40: /* Down */
-			cursorY = Math.min(cursorY + 1, savedata.grid.length - 1);
-			break;
-		case ord('D'):
-		case 39: /* Right */
-			cursorX = Math.min(cursorX + 1, savedata.grid[0].length);
-			break;
-		case 0x31:
-			if (drawGridBoolean) {
-				if (1 == createTable(cursorX, cursorY, false)) {alert("You can't build a chair here!");}
+	if (e.keyCode == 0x30/*ord('0')*/) {
+		searchingBoolean = searchingBoolean ? false : true;
+		searching = '';
+		genObjectSearchResults();
+	} else {
+		if (searchingBoolean) {
+			let queryChanged = true;
+			if (e.keyCode == 0x20 || (e.keyCode >= ord('A') && e.keyCode <= ord('Z'))) {
+				searching += e.key;
+			} else if (e.keyCode == 8 /* Backspace */) {
+				if (searching.length != 0) {
+					searching = searching.substring(0, searching.length - 1);
+				} else {
+					queryChanged = false;
+				}
+			} else {
+				queryChanged = false;
 			}
-			break;
-		case 0x32:
-			if (drawGridBoolean) {
-				if (1 == createChair(cursorX, cursorY, false)) {alert("You can't build a chair here!");}
+			if (queryChanged) {
+				//console.log('query changed !');
+				genObjectSearchResults();
 			}
-			break;
-		case 0x33:			
-		case 0x34:	
-		case 0x35:	
-		case 0x36:		
-		case 0x37:
-		case 0x38:		
-		case 0x39:
-		case 0x30:
-			break;
-		default:
-			break;
-			console.log(e);
+		} else {
+			switch(e.keyCode) {
+				case ord('W'):
+				case 38: /* Up */
+					cursorY = Math.max(cursorY - 1, 0);
+					break;
+				case ord('A'):
+				case 37: /* Left */
+					cursorX = Math.max(cursorX - 1, 0);
+					break;
+				case ord('S'):
+				case 40: /* Down */
+					cursorY = Math.min(cursorY + 1, savedata.grid.length - 1);
+					break;
+				case ord('D'):
+				case 39: /* Right */
+					cursorX = Math.min(cursorX + 1, savedata.grid[0].length);
+					break;
+				default:
+					break;
+					console.log(e);
+			}
+		}
 	}
 });
 

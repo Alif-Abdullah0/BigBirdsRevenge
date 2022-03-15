@@ -1,6 +1,6 @@
 {% extends "layout.html" %}
 {% block title %} {{name}} {% endblock %}
-{% block head %} {{ super() }} {% endblock %}
+{% block head %} {{ super() }} <link rel='stylesheet' href='/static/css/game.css'> {% endblock %}
 
 {% block content %}
 <main style="margin-top:4%;">
@@ -12,6 +12,15 @@
 				<button id="saveButton" style="margin:auto;">Save</button>
 				<button id="loadButton" style="margin:auto;">Load</button>
 				<button id="buildToggleButton" style="margin:auto;">Toggle Grid</button>
+			</div>
+			<div style="padding-top: 5%;padding-bottom: 5%;"></div>
+			<div style="font-size:1.2em;">
+				<div id="searchQueryText">
+					<pre>🔎: __</pre>
+				</div>
+				<div id="searchResults" class="scrollable">
+
+				</div>
 			</div>
 		</div>
 		<center>
