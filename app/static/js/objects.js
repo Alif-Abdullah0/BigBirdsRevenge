@@ -1,11 +1,11 @@
 const objectTypeList = [
 	/* id name constructor constructorArgs  */
-	[0, "table", createTable, ['x', 'y']],
-	[1, "chair", createChair, ['x', 'y']],
-	[2, "kitchen counter", createCounter, ['x', 'y']],
+	[0, "table", createTable, drawTable, ['x', 'y']],
+	[1, "chair", createChair, drawChair, ['x', 'y']],
+	[2, "kitchen counter", createCounter, drawCounter, ['x', 'y']],
 ];
 objectTypeList.sort(); 
-var selectedObjectInde = -1;
+var selectedObjectIndex = -1;
 
 function canBuild(object) {
 	//console.log(object);
@@ -72,6 +72,12 @@ function createTable(x, y) {
 
 }
 
+function drawTable(table, alpha = 1.0) {
+    //console.log(`rgb(150,75,0,${alpha})`);
+    ctx.fillStyle = `rgb(150,75,0,${alpha})`;
+    ctx.fillRect(table.x * 25, table.y * 25, 25, 25);
+}
+
 function createChair(x, y, forcebuild) {
 	let newchair = new FurniturePrototype(x, y, 1);
 	if (!canBuild(newchair)) {
@@ -106,6 +112,15 @@ function createChair(x, y, forcebuild) {
 	return 0;
 }
 
+function drawChair(chair, alpha = 1.0) {
+    ctx.fillStyle = `rgba(150,75,0,${alpha})`;
+	ctx.beginPath();
+	ctx.arc(chair.x * 25 + 12.5, chair.y * 25 + 12.5, 10, 0, 2 * Math.PI);
+	ctx.fill();
+	ctx.strokeStyle = `rgba(0,0,0,${alpha})`;
+	ctx.stroke();
+}
+
 function createCounter(x, y) {
 	if (y != savedata.grid.length - 1) {return 1;}
 
@@ -116,4 +131,9 @@ function createCounter(x, y) {
 	if (Build(newCounter) == 1) {return 1;}
     savedata.counters.push(newCounter);
 	return 0;
+}
+
+function drawCounter(counter, alpha = 1.0) {
+    ctx.fillStyle = `rgba(142, 142, 142, ${alpha})`;
+	ctx.fillRect(counter.x * 25, counter.y * 25, 25, 25);
 }

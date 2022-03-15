@@ -39,27 +39,11 @@ function nextframe() {
 	ctx.clearRect(0,0,c.clientWidth,c.clientHeight);
 	for (index in savedata.layout) {
 		object = savedata.layout[index];
-		switch (object.id) {
-			case 0:
-				ctx.fillStyle = 'rgb(150,75,0)';
-				ctx.fillRect(object.x * 25, object.y * 25, 25, 25);
-				break;
-			case 1:
-				ctx.fillStyle = 'rgb(150,75,0)';
-				ctx.beginPath();
-				ctx.arc(object.x * 25 + 12.5, object.y * 25 + 12.5, 10, 0, 2 * Math.PI);
-				ctx.fill();
-				ctx.strokeStyle = '#000000';
-				ctx.stroke();
-				break;
-			case 2:
-				ctx.fillStyle = '#8E8E8E';
-				ctx.fillRect(object.x * 25, object.y * 25, 25, 25);
-				break;
-		}
+		objectTypeList[object.id][3](object);
 	}
 	if (drawGridBoolean) {
 		drawGrid();
+		drawObjectPreview();
 		drawCursor();
 	}
 	if (searchingBoolean) {
@@ -106,6 +90,13 @@ function drawGrid() {
 	ctx.stroke();
 }
 
+function drawObjectPreview() {
+	if (selectedObjectIndex != -1) {
+		let previewobject = new FurniturePrototype(cursorX, cursorY, selectedObjectIndex);
+		objectTypeList[previewobject.id][3](previewobject, 0.5);
+	}
+}
+
 function drawCursor() {
 	ctx.beginPath();
 	ctx.fillStyle = '#7f7f7f';
@@ -143,7 +134,18 @@ function genObjectSearchResults() {
 		let searchedFor = (searching.trim() == '') ? true : includesInArray(objectDef[1], terms);
 		if (searchedFor) {
 			//console.log(objectDef);
-			searchResultsDiv.innerHTML += "<p id=objectTypeDef_" + index + ">" + JSON.stringify(objectDef) + "&nbsp;<button>Select</button></p><hr>";
+			let newp = document.createElement('p');
+			newp.id = 'objectTypeDef_' + index;
+			newp.innerHTML = JSON.stringify(objectDef) + "&nbsp;<button>Select</button>";
+			newp.children[0].onclick = (e) => {
+				console.log(e.target.parentElement.id);
+				selectedObjectIndex = parseInt(e.target.parentElement.id.substring('objectTypeDef_'.length));
+				searchingBoolean = false;
+			};
+			searchResultsDiv.appendChild(newp);
+			searchResultsDiv.appendChild(document.createElement('hr'));
+
+			//console.log(newp.children[0]);
 		}
 	});
 	if (searchResultsDiv.childElementCount == 1) {
@@ -156,6 +158,8 @@ saveButton.addEventListener('click', save);
 toggleGridButton.addEventListener('click', () => {
 	drawGridBoolean = drawGridBoolean ? false : true;
 	searchingBoolean = false;
+	selectedObjectIndex = -1;
+	searching = '';
 });
 c.addEventListener('click', (e) => {
 	if (drawGridBoolean) {
@@ -166,7 +170,6 @@ c.addEventListener('click', (e) => {
 document.addEventListener('keydown', (e) => {
 	if (drawGridBoolean && e.keyCode == 0x30 /*ord('0')*/) {
 		searchingBoolean = searchingBoolean ? false : true;
-		searching = '';
 		genObjectSearchResults();
 	} else {
 		if (searchingBoolean) {
@@ -219,12 +222,10 @@ function startgame() {
 	createChair(5,4);
 	createChair(5,6);
 
-	/*
 	createCounter(28,23);
 	createCounter(29,23);
 	createCounter(30,23);
 	createCounter(31,23);
-	*/
 
 	window.requestAnimationFrame(nextframe);
 }
