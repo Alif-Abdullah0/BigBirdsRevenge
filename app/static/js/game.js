@@ -19,7 +19,7 @@ var requestID;
 	- grid: for the grid lines
 	- people: to store the locations of the people in the restaurant
 */
-var savedata = {money : 1000, layout : [], grid : Array(600/25), people : [], igt : [7,0]};
+var savedata = {money : 1000, layout : [], grid : Array(600/25), people : [], igt : [7,0], counters : []};
 for (let i = 0; i < savedata.grid.length; i++) {
 	savedata.grid[i] = Array(800/25);
 }
@@ -143,7 +143,7 @@ function genObjectSearchResults() {
 		let searchedFor = (searching.trim() == '') ? true : includesInArray(objectDef[1], terms);
 		if (searchedFor) {
 			//console.log(objectDef);
-			searchResultsDiv.innerHTML += "<p id=objectTypeDef_" + index + ">" + JSON.stringify(objectDef) + "</p><hr>";
+			searchResultsDiv.innerHTML += "<p id=objectTypeDef_" + index + ">" + JSON.stringify(objectDef) + "&nbsp;<button>Select</button></p><hr>";
 		}
 	});
 	if (searchResultsDiv.childElementCount == 1) {
@@ -202,7 +202,7 @@ document.addEventListener('keydown', (e) => {
 					break;
 				case ord('D'):
 				case 39: /* Right */
-					cursorX = Math.min(cursorX + 1, savedata.grid[0].length);
+					cursorX = Math.min(cursorX + 1, savedata.grid[0].length - 1);
 					break;
 				default:
 					break;
@@ -219,12 +219,21 @@ function startgame() {
 	createChair(5,4);
 	createChair(5,6);
 
+	/*
+	createCounter(28,23);
+	createCounter(29,23);
+	createCounter(30,23);
+	createCounter(31,23);
+	*/
+
 	window.requestAnimationFrame(nextframe);
 }
 
-if (promptSave) {
-	if (confirm("Would you like to load your previously saved game?")) {
-		load();
+window.addEventListener('load', () => {
+	if (promptSave) {
+		if (confirm("Would you like to load your previously saved game?")) {
+			load();
+		}
 	}
-}
-window.addEventListener('load', startgame);
+	startgame();
+});

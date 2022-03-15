@@ -16,10 +16,8 @@ async function saveRequest(s) {
 }
 
 async function save() {
-	compactSaveData();
-	localStorage['save'] = JSON.stringify(savedata);
+	localStorage['save'] = JSON.stringify(compactSaveData());
 	console.log('Saved to localStorage!');
-	expandLoadedSave();
     saveRequest(localStorage['save'])
 	.then(data => {
 	    console.log("Server Response: ", data.valueOf());
@@ -59,6 +57,7 @@ function expandLoadedSave() {
 	for (i = 0; i < savedata.grid.length; i++) {
 		savedata.grid[i] = Array(800 / 25);
 	}
+	savedata.counters = [];
 
 	let savelayout = savedata.layout;
 	savedata.layout = [];
@@ -66,20 +65,23 @@ function expandLoadedSave() {
 		//console.log(savelayout[i]);
 		switch (savelayout[i].id) {
 			case 0:
-				createTable(savelayout[i].x, savelayout[i].y, true);
-				break;
 			case 1:
-				createChair(savelayout[i].x, savelayout[i].y, true);
+			case 2:
+				objectTypeList[savelayout[i].id][2](savelayout[i].x, savelayout[i].y);
 				break;
 			default:
 				console.error("Something went wrong");
+				break;
 		}
 	}
 }
 
 function compactSaveData() {
-	for (i in savedata.layout) {
-		let elem = savedata.layout[i];
+	let tosave = {money : savedata.money, layout : [], people : savedata.people, igt : savedata.igt};
+	for (i = 0; i < savedata.layout.length; i++) {
+		tosave.layout[i] = Object();
+		Object.assign(tosave.layout[i], savedata.layout[i]);
+		let elem = tosave.layout[i];
 		switch (elem.id) {
 			case 0:
 				delete elem.chairsAttached;
@@ -89,5 +91,6 @@ function compactSaveData() {
 				break;
 		}
 	}
-	delete savedata.grid;
+	console.log(tosave);
+	return tosave;
 }

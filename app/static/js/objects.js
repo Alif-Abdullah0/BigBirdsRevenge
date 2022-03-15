@@ -4,6 +4,8 @@ const objectTypeList = [
 	[1, "chair", createChair, ['x', 'y']],
 	[2, "kitchen counter", createCounter, ['x', 'y']],
 ];
+objectTypeList.sort(); 
+var selectedObjectInde = -1;
 
 function canBuild(object) {
 	//console.log(object);
@@ -112,5 +114,6 @@ function createCounter(x, y) {
 	newCounter.holding = undefined;
 
 	if (Build(newCounter) == 1) {return 1;}
+    savedata.counters.push(newCounter);
 	return 0;
 }
