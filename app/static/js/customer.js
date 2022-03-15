@@ -9,6 +9,7 @@ function customer_tip(customer) {
 }
 
 function Server() {
+  this.orders = null;
   this.holding = null;
   this.task = false;
   this.tableNum = -1;
@@ -25,6 +26,7 @@ function Server_takeOrder(server, table) {
   return orders;
 }
 
-function make_Food(orders) {
+function make_Food(server) {
+  console.log(server.orders);
   console.log(savedata);
 }
