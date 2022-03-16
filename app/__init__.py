@@ -36,7 +36,7 @@ def index():
         if os.path.exists(filename):
             save = True;
     return render_template("game.html",user=session.get('username'), saveavailable=save);
-    
+
 @app.route("/login", methods=['GET','POST'])
 def login():
     """
@@ -127,6 +127,14 @@ def load():
     contents = f.read();
     f.close();
     return Response(json.dumps({'status' : 'good', 'message' : 'Saved!', 'save' : contents}), content_type='application/json');
+
+@app.route("/surprise")
+def surprise():
+    return render_template("surprise.html")
+
+@app.route("/about")
+def about():
+    return render_template("about.html")
 
 if __name__ == "__main__":
     app.debug = True;
