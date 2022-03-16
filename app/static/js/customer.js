@@ -17,16 +17,16 @@ function customer_tip(customer) {
     return Math.round(customer.happy * (0.8 + Math.random()/2.5) * 10);
 }
 
-function drawPerson(customer, alpha = 1.0) {
+function drawPerson(customer) {
     if (customer.personType == 'customer') {
-        ctx.fillStyle = `rgba(255, 0, 0, ${alpha})`;
+        ctx.fillStyle = 'rgb(255, 0, 0)';
     } else /* server */ {
-        ctx.fillStyle = `rgba(0, 0, 0, ${alpha})`;
+        ctx.fillStyle = 'rgb(0, 0, 0)';
     }
     ctx.fillRect(customer.x * 25 - 3, customer.y * 25 - 1, 6, 10);
     ctx.beginPath();
     ctx.arc(customer.x * 25, customer.y * 25 - 6, 7, 0, 2 * Math.PI);
-    ctx.fillStyle = `rgba(232, 211, 185, ${alpha})`;
+    ctx.fillStyle = 'rgb(232, 211, 185)';
     ctx.fill();
 }
 
