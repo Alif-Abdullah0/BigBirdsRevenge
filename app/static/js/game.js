@@ -52,6 +52,9 @@ function nextframe() {
 		searchQueryDiv.textContent = drawGridBoolean ? 'Press 0 to search objects' : '';
 		searchResultsDiv.innerHTML = '';
 	}
+	savedata.people.forEach((person) => {
+		person.actionFunction(person);
+	});
 	drawPeople();
 
 	dummy = "$" + savedata.money;

@@ -108,6 +108,7 @@ function createChair(x, y, forcebuild) {
 		if (!forcebuild && !confirm("This chair is not next to any table. Are you sure you want to build this?")) {return 2;}
 		newchair.tableOwner = null;
 	}
+	newchair.customerSitting = null;
 	if (Build(newchair) == 1)  {return 1;}
 	return 0;
 }
