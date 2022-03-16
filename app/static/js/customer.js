@@ -11,21 +11,22 @@ function Customer(order) {
     this.framesPerAction = 60;
     this.framesTillNextAction = this.framesPerAction;
     this.actionFunction = Customer_takeAction;
+    this.shirtColor = `rgb(${Math.floor(Math.random() * 255)}, ${Math.floor(Math.random() * 255)}, ${Math.floor(Math.random() * 255)})`;
 };
 
 function customer_tip(customer) {
     return Math.round(customer.happy * (0.8 + Math.random()/2.5) * 10);
 }
 
-function drawPerson(customer) {
-    if (customer.personType == 'customer') {
-        ctx.fillStyle = 'rgb(255, 0, 0)';
+function drawPerson(person) {
+    if (person.personType == 'customer') {
+        ctx.fillStyle = person.shirtColor;
     } else /* server */ {
         ctx.fillStyle = 'rgb(0, 0, 0)';
     }
-    ctx.fillRect(customer.x * 25 - 3, customer.y * 25 - 1, 6, 10);
+    ctx.fillRect(person.x * 25 - 3, person.y * 25 - 1, 6, 10);
     ctx.beginPath();
-    ctx.arc(customer.x * 25, customer.y * 25 - 6, 7, 0, 2 * Math.PI);
+    ctx.arc(person.x * 25, person.y * 25 - 6, 7, 0, 2 * Math.PI);
     ctx.fillStyle = 'rgb(232, 211, 185)';
     ctx.fill();
 }
@@ -43,11 +44,11 @@ function Customer_takeAction(customer) {
                 }
             }
             //console.log(chairlist);
-      
+
             if (chairlist.length == 0) {return;}
             let mindistance_object = chairlist[0];
             for (let i = 1; i < chairlist.length; i++) {
-                if (Math.abs(chairlist[i].x - customer.x) + Math.abs(chairlist[i].y - customer.y) < 
+                if (Math.abs(chairlist[i].x - customer.x) + Math.abs(chairlist[i].y - customer.y) <
                 Math.abs(mindistance_object.x - customer.x) + Math.abs(mindistance_object - customer.y)) {
                     mindistance_object = chairlist[i];
                 }
