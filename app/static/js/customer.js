@@ -30,34 +30,46 @@ function drawPerson(customer) {
     ctx.fill();
 }
 
+function Customer_findTable(customer) {
+    let chairlist = [];
+    for (let i = 0; i < savedata.layout.length; i++) {
+        if (savedata.layout[i].id == 1 && savedata.layout[i].tableOwner != null && savedata.layout[i].customerSitting == null) {
+            chairlist.push(savedata.layout[i]);
+        }
+    }
+    //console.log(chairlist);
+     
+    if (chairlist.length == 0) {return;}
+    let mindistance_object = chairlist[0];
+    for (let i = 1; i < chairlist.length; i++) {
+        if (Math.abs(chairlist[i].x - customer.x) + Math.abs(chairlist[i].y - customer.y) < 
+        Math.abs(mindistance_object.x - customer.x) + Math.abs(mindistance_object - customer.y)) {
+            mindistance_object = chairlist[i];
+        }
+    }
+    customer.tableHeading = mindistance_object;
+}
+
 function Customer_takeAction(customer) {
     if (--customer.framesTillNextAction != 0) {return;}
     customer.framesTillNextAction = customer.framesPerAction;
 
     if (customer.table == null) {
         if (customer.tableHeading == null) {
-            let chairlist = [];
-            for (let i = 0; i < savedata.layout.length; i++) {
-                if (savedata.layout[i].id == 1 && savedata.layout[i].customerSitting == null) {
-                    chairlist.push(savedata.layout[i]);
-                }
-            }
-            //console.log(chairlist);
-      
-            if (chairlist.length == 0) {return;}
-            let mindistance_object = chairlist[0];
-            for (let i = 1; i < chairlist.length; i++) {
-                if (Math.abs(chairlist[i].x - customer.x) + Math.abs(chairlist[i].y - customer.y) < 
-                Math.abs(mindistance_object.x - customer.x) + Math.abs(mindistance_object - customer.y)) {
-                    mindistance_object = chairlist[i];
-                }
-            }
-            customer.tableHeading = mindistance_object;
+            Customer_findTable(customer);
         } else {
             let angle = Math.atan2(customer.tableHeading.y + 0.5 - customer.y, customer.tableHeading.x + 0.5 - customer.x);
             for (let i = 1; i < 60; i++) {
                 setTimeout((customer, moveangle) => {
                 if (customer.table == null) {
+                    if (customer.tableHeading == null) {
+                        Customer_findTable(customer);
+                        return;
+                    }
+                    if (customer.tableHeading.customerSitting != null) {
+                        customer.tableHeading = null;
+                        return;
+                    }
                     customer.x += Math.cos(moveangle);
                     customer.y += Math.sin(moveangle);
                     if (Math.pow(customer.tableHeading.x + 0.5 - customer.x, 2) + Math.pow(customer.tableHeading.y + 0.5 - customer.y, 2) <= 0.25) {
