@@ -52,6 +52,7 @@ function nextframe() {
 		searchQueryDiv.textContent = drawGridBoolean ? 'Press 0 to search objects' : '';
 		searchResultsDiv.innerHTML = '';
 	}
+	drawPeople();
 
 	dummy = "$" + savedata.money;
 	while (dummy.length < 6) {
@@ -71,7 +72,7 @@ function nextframe() {
 
 function drawPeople() {
 	for (index in savedata.people) {
-
+		drawPerson(savedata.people[index]);
 	}
 }
 
@@ -175,7 +176,7 @@ document.addEventListener('keydown', (e) => {
 		if (searchingBoolean) {
 			let queryChanged = true;
 			if (e.keyCode == 0x20 || (e.keyCode >= ord('A') && e.keyCode <= ord('Z'))) {
-				searching += e.key;
+				if (searching.length <= 29) {searching += e.key;}
 			} else if (e.keyCode == 8 /* Backspace */) {
 				if (searching.length != 0) {
 					searching = searching.substring(0, searching.length - 1);
@@ -206,6 +207,18 @@ document.addEventListener('keydown', (e) => {
 				case ord('D'):
 				case 39: /* Right */
 					cursorX = Math.min(cursorX + 1, savedata.grid[0].length - 1);
+					break;
+				case ord('I'):
+					if (selectedObjectIndex != -1) {
+						if (savedata.money >= objectTypeList[selectedObjectIndex][4]) {
+							let rval = objectTypeList[selectedObjectIndex][2](cursorX, cursorY);
+							if (rval == 1) {
+								alert(`Can't build a(n) ${ objectTypeList[selectedObjectIndex][1] } here!`);
+							} else if (rval == 0) {
+								savedata.money -= objectTypeList[selectedObjectIndex][4];
+							}
+						}
+					}
 					break;
 				default:
 					break;

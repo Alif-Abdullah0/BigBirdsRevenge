@@ -1,8 +1,8 @@
 const objectTypeList = [
 	/* id name constructor constructorArgs  */
-	[0, "table", createTable, drawTable, ['x', 'y']],
-	[1, "chair", createChair, drawChair, ['x', 'y']],
-	[2, "kitchen counter", createCounter, drawCounter, ['x', 'y']],
+	[0, "table", createTable, drawTable, 200],
+	[1, "chair", createChair, drawChair, 100],
+	[2, "kitchen counter", createCounter, drawCounter, 500],
 ];
 objectTypeList.sort(); 
 var selectedObjectIndex = -1;

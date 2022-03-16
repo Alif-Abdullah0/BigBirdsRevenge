@@ -1,18 +1,37 @@
 function Customer(order) {
+  this.personType = 'customer';
   this.order = order;
   this.happy = 1;
   this.table = null;
+  this.x = 0.5;
+  this.y = savedata.grid.length / 2;
 };
 
 function customer_tip(customer) {
   return Math.round(customer.happy * (0.8 + Math.random()/2.5) * 10);
 }
 
+function drawPerson(customer, alpha = 1.0) {
+  if (customer.personType == 'customer') {
+    ctx.fillStyle = `rgba(255, 0, 0, ${alpha})`;
+  } else /* server */ {
+    ctx.fillStyle = `rgba(0, 0, 0, ${alpha})`;
+  }
+  ctx.fillRect(customer.x * 25 - 3, customer.y * 25 - 1, 6, 10);
+  ctx.beginPath();
+  ctx.arc(customer.x * 25, customer.y * 25 - 6, 7, 0, 2 * Math.PI);
+  ctx.fillStyle = `rgba(232, 211, 185, ${alpha})`;
+  ctx.fill();
+}
+
 function Server() {
+  this.personType = 'server';
   this.orders = null;
   this.holding = null;
   this.task = false;
   this.tableNum = -1;
+  this.x = savedata.grid[0].length - 2;
+  this.y = savedata.grid.length - 1.5;
 };
 
 function Server_serve(server, table, item) {
