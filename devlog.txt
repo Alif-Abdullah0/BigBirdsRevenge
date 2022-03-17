@@ -27,4 +27,14 @@ williamC -- 03/11/22 9:21
 Worked on people variables and attempted to figure out the logic they will follow
 
 sophieL -- 03/14/22 9:24
-Bugfixing stuff. game.js is a bit of a mess right now because it's so large that we keep getting merge conflicts. 
+Bugfixing stuff. game.js is a bit of a mess right now because it's so large that we keep getting merge conflicts.
+
+cameronN -- 03/15/22 22:00
+Wrote all of the new customer code, including drawing the customers and them taking their seats.
+Also created the ability to place furniture at the cost of money.
+
+sophieL -- 03/16/22 9:09
+wrote code that randomized the shirt color of each customer.
+
+williamC -- 03/17/22 9:12
+Wrote code for customers to choose what to eat when they spawn. Made food dict.

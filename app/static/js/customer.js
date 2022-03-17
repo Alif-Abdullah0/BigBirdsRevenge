@@ -1,7 +1,7 @@
-function Customer(order) {
+function Customer() {
     this.personType = 'customer';
-    this.order = order;
     this.happiness = 1.0;
+    this.order = Object.keys(food)[Math.floor(Math.random() * Object.keys(food).length)];
     this.table = null;
 
     this.x = 0.5;
@@ -39,15 +39,13 @@ function Customer_findTable(customer) {
         }
     }
     //console.log(chairlist);
-     
+
     if (chairlist.length == 0) {return;}
     let dist_array = [];
     for (let i = 0; i < chairlist.length; i++) {
         dist_array.push([Math.pow(chairlist[i].x + 0.5 - customer.x, 2) + Math.pow(chairlist[i].y + 0.5 - customer.y, 2), chairlist[i]]);
     }
     dist_array.sort();
-    //console.log(customer);
-    //console.log(dist_array);
     customer.tableHeading = dist_array[0][1];
 }
 

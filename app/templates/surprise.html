@@ -1,0 +1,11 @@
+{% extends "layout.html" %}
+{% block title %} {{name}} {% endblock %}
+{% block head %} {{ super() }} <link rel='stylesheet' href='/static/css/game.css'> {% endblock %}
+{% block content %}
+
+<div style="margin-top:4%;"
+<center>
+  <canvas style="border: 1px solid red;" id="drawing"> </canvas>
+</center>
+</div>
+{% endblock %}
