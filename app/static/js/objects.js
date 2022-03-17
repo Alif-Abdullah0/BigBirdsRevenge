@@ -137,4 +137,7 @@ function createCounter(x, y) {
 function drawCounter(counter, alpha = 1.0) {
     ctx.fillStyle = `rgba(142, 142, 142, ${alpha})`;
 	ctx.fillRect(counter.x * 25, counter.y * 25, 25, 25);
+	if (counter.food != null) {
+		// draw food
+	}
 }

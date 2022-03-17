@@ -88,23 +88,36 @@ function Customer_takeAction(customer) {
 }
 
 function Server() {
-  this.personType = 'server';
-  this.orders = null;
-  this.holding = null;
-  this.task = false;
-  this.tableNum = -1;
-  this.x = savedata.grid[0].length - 2;
-  this.y = savedata.grid.length - 1.5;
+    this.personType = 'server';
+    this.orders = null;
+    this.holding = null;
+    this.task = false;
+    this.tableNum = -1;
+    this.x = savedata.grid[0].length - 2;
+    this.y = savedata.grid.length - 1.5;
 
-  // Technical
-  this.framesPerAction = 10;
-  this.framesTillNextAction = this.framesPerAction;
-  this.actionFunction = Server_takeAction;
+    // Technical
+    this.counterHeading = null;
+    this.framesPerAction = 10;
+    this.framesTillNextAction = this.framesPerAction;
+    this.actionFunction = Server_takeAction;
 };
 
 function Server_takeAction(server) {
-  if (--server.framesTillNextAction != 0) {return;}
-  server.framesTillNextAction = server.framesPerAction;
+    if (--server.framesTillNextAction != 0) {return;}
+    server.framesTillNextAction = server.framesPerAction;
+
+    if (server.counterHeading == null) {
+        for (let i = 0; i < savedata.counters.length; i++) {
+            if (savedata.counters[i].food != null) {
+                server.counterHeading = savedata.counters[i];
+                break;
+            }
+        }
+    }
+    if (server.counterHeading != null) {
+
+    }
 }
 
 function Server_serve(server, table, item) {

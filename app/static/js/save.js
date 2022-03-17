@@ -58,6 +58,7 @@ function expandLoadedSave() {
 		savedata.grid[i] = Array(800 / 25);
 	}
 	savedata.counters = [];
+	savedata.people = [];
 
 	let savelayout = savedata.layout;
 	savedata.layout = [];
@@ -65,7 +66,17 @@ function expandLoadedSave() {
 		//console.log(savelayout[i]);
 		switch (savelayout[i].id) {
 			case 0:
+				objectTypeList[savelayout[i].id][2](savelayout[i].x, savelayout[i].y);
+				break;
 			case 1:
+				objectTypeList[savelayout[i].id][2](savelayout[i].x, savelayout[i].y);
+				if (savelayout[i].customerSitting != null) {
+					let cust = savelayout[i].customerSitting;
+					cust.actionFunction = Customer_takeAction;
+					cust.table = savelayout[i];
+					savedata.people.push(cust);
+				}
+				break;
 			case 2:
 				objectTypeList[savelayout[i].id][2](savelayout[i].x, savelayout[i].y);
 				break;
@@ -77,8 +88,8 @@ function expandLoadedSave() {
 }
 
 function compactSaveData() {
-	let tosave = {money : savedata.money, layout : [], people : savedata.people, igt : savedata.igt};
-	for (i = 0; i < savedata.layout.length; i++) {
+	let tosave = {money : savedata.money, layout : [], igt : savedata.igt};
+	for (let i = 0; i < savedata.layout.length; i++) {
 		tosave.layout[i] = Object();
 		Object.assign(tosave.layout[i], savedata.layout[i]);
 		let elem = tosave.layout[i];
@@ -87,6 +98,9 @@ function compactSaveData() {
 				delete elem.chairsAttached;
 				break;
 			case 1:
+				if (elem.customerSitting != null) {
+					elem.customerSitting.table = null;
+				} 	
 				delete elem.tableOwner;
 				break;
 		}
