@@ -1,6 +1,6 @@
-function Customer(order) {
+function Customer() {
     this.personType = 'customer';
-    this.order = order;
+    this.order = Object.keys(food)[Math.floor(Math.random() * Object.keys(food).length)];
     this.happy = 1;
     this.table = null;
 
@@ -39,11 +39,11 @@ function Customer_findTable(customer) {
         }
     }
     //console.log(chairlist);
-     
+
     if (chairlist.length == 0) {return;}
     let mindistance_object = chairlist[0];
     for (let i = 1; i < chairlist.length; i++) {
-        if (Math.abs(chairlist[i].x - customer.x) + Math.abs(chairlist[i].y - customer.y) < 
+        if (Math.abs(chairlist[i].x - customer.x) + Math.abs(chairlist[i].y - customer.y) <
         Math.abs(mindistance_object.x - customer.x) + Math.abs(mindistance_object - customer.y)) {
             mindistance_object = chairlist[i];
         }
