@@ -52,8 +52,8 @@ function nextframe() {
 		searchQueryDiv.textContent = drawGridBoolean ? 'Press 0 to search objects' : '';
 		searchResultsDiv.innerHTML = '';
 	}
-	savedata.people.forEach((person) => {
-		person.actionFunction(person);
+	savedata.people.forEach((person, index) => {
+		person.actionFunction(person, index);
 	});
 	drawPeople();
 
@@ -74,8 +74,9 @@ function nextframe() {
 }
 
 function drawPeople() {
-	for (index in savedata.people) {
-		drawPerson(savedata.people[index]);
+	for (let i = 0; i < savedata.people.length; i++) {
+		let person = savedata.people[i];
+		drawPerson(person, i);
 	}
 }
 
