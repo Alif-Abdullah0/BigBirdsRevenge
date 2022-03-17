@@ -34,4 +34,7 @@ Wrote all of the new customer code, including drawing the customers and them tak
 Also created the ability to place furniture at the cost of money.
 
 sophieL -- 03/16/22 9:09
-wrote code that randomized the shirt color of each customer. 
+wrote code that randomized the shirt color of each customer.
+
+williamC -- 03/17/22 9:12
+Wrote code for customers to choose what to eat when they spawn. Made food dict.
