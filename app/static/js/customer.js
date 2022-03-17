@@ -1,7 +1,7 @@
 function Customer(order) {
     this.personType = 'customer';
     this.order = order;
-    this.happy = 1;
+    this.happiness = 1.0;
     this.table = null;
 
     this.x = 0.5;
@@ -9,7 +9,7 @@ function Customer(order) {
 
     //Technical
     this.framesPerAction = 60;
-    this.framesTillNextAction = this.framesPerAction;
+    this.framesTillNextAction = this.framesPerAction / 2;
     this.actionFunction = Customer_takeAction;
     this.shirtColor = `rgb(${Math.floor(Math.random() * 255)}, ${Math.floor(Math.random() * 255)}, ${Math.floor(Math.random() * 255)})`;
 };
@@ -41,39 +41,54 @@ function Customer_findTable(customer) {
     //console.log(chairlist);
      
     if (chairlist.length == 0) {return;}
-    let mindistance_object = chairlist[0];
-    for (let i = 1; i < chairlist.length; i++) {
-        if (Math.abs(chairlist[i].x - customer.x) + Math.abs(chairlist[i].y - customer.y) < 
-        Math.abs(mindistance_object.x - customer.x) + Math.abs(mindistance_object - customer.y)) {
-            mindistance_object = chairlist[i];
-        }
+    let dist_array = [];
+    for (let i = 0; i < chairlist.length; i++) {
+        dist_array.push([Math.pow(chairlist[i].x + 0.5 - customer.x, 2) + Math.pow(chairlist[i].y + 0.5 - customer.y, 2), chairlist[i]]);
     }
-    customer.tableHeading = mindistance_object;
+    dist_array.sort();
+    //console.log(customer);
+    //console.log(dist_array);
+    customer.tableHeading = dist_array[0][1];
 }
 
-function Customer_takeAction(customer) {
+
+function Customer_takeAction(customer, peopleArrayIndex) {
     if (--customer.framesTillNextAction != 0) {return;}
     customer.framesTillNextAction = customer.framesPerAction;
 
     if (customer.table == null) {
-        if (customer.tableHeading == null) {
-            Customer_findTable(customer);
+        if (customer.tableHeading == null && ((customer) => {Customer_findTable(customer);return customer.tableHeading != null})(customer)) {
+            //Customer_findTable(customer);
         } else {
-            let angle = Math.atan2(customer.tableHeading.y + 0.5 - customer.y, customer.tableHeading.x + 0.5 - customer.x);
+            let angle = customer.tableHeading == null ? 0 : Math.atan2(customer.tableHeading.y + 0.5 - customer.y, customer.tableHeading.x + 0.5 - customer.x);
             for (let i = 1; i < 60; i++) {
                 setTimeout((customer, moveangle) => {
                 if (customer.table == null) {
                     if (customer.tableHeading == null) {
                         Customer_findTable(customer);
+                        if (customer.tableHeading == null) {
+                            if (Math.pow(customer.y - 12, 2) + Math.pow(customer.x - 0.5, 2) < 1) {
+                                customer.happiness -= 0.001;
+                                if (customer.happiness <= 0) {
+                                    savedata.people.splice(peopleArrayIndex, 1);
+                                    delete customer;
+                                }
+                                return;
+                            }
+                            let angle = Math.atan2((11.5 + Math.random()) - customer.y, (0 + Math.random()) - customer.x, 2);
+                            if (angle < 0) {angle += 2 * Math.PI;}
+                            customer.x += 5 / 60.0 * Math.cos(angle);
+                            customer.y += 5 / 60.0 * Math.sin(angle)
+                        }
                         return;
                     }
                     if (customer.tableHeading.customerSitting != null) {
                         customer.tableHeading = null;
                         return;
                     }
-                    customer.x += Math.cos(moveangle);
-                    customer.y += Math.sin(moveangle);
-                    if (Math.pow(customer.tableHeading.x + 0.5 - customer.x, 2) + Math.pow(customer.tableHeading.y + 0.5 - customer.y, 2) <= 0.25) {
+                    customer.x += 5 / 60.0 * Math.cos(moveangle);
+                    customer.y += 5 / 60.0 * Math.sin(moveangle);
+                    if (Math.pow(customer.tableHeading.x + 0.5 - customer.x, 2) + Math.pow(customer.tableHeading.y + 0.5 - customer.y, 2) <= 0.0625) {
                         customer.table = customer.tableHeading;
                         customer.x = 0.5 + customer.table.x;
                         customer.y = 0.5 + customer.table.y;
@@ -84,6 +99,8 @@ function Customer_takeAction(customer) {
                 }, Math.trunc(1000 * i / 60.0), customer, angle);
             }
         }
+    } else {
+        // Order food? 
     }
 }
 
