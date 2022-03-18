@@ -1,8 +1,17 @@
 const food = {
-  "steak" : 20.00,
-  "burger" : 10.00,
-  "fries" : 5.00,
-  "coffee" : 3.00,
-  "soda" : 2.00,
-  "water" : 1.00
+  "steak" : 200,
+  "burger" : 100,
+  "fries" : 50,
+  "coffee" : 30,
+  "soda" : 20,
+  "water" : 10
 };
+
+function drawFood(food, x, y) {
+    ctx.fillStyle = "gray";
+    ctx.fillRect((x * 25) - 5, y * 25 - 2.5, 10, 5);
+    if (food == "steak") {
+        ctx.fillStyle = `#a53f29`;
+        ctx.fillRect((x * 25) - 3.5, y * 25 - 3, 7, 4);
+    }
+}

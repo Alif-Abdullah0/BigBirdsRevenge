@@ -13,7 +13,7 @@ function Customer() {
 
     this.x = 0.5;
     this.y = savedata.grid.length / 2;
-    
+
 
     //Technical
     this.framesPerAction = 60;
@@ -36,6 +36,11 @@ function drawPerson(person) {
     ctx.arc(person.x * 25, person.y * 25 - 6, 7, 0, 2 * Math.PI);
     ctx.fillStyle = 'rgb(232, 211, 185)';
     ctx.fill();
+    if (person.personType == 'server' && person.holding != null){
+        drawFood(person.holding, person.x - 0.1, person.y);
+    } else if (person.personType == 'customer' && person.gotFood && person.eatingTime > 0) {
+        drawFood(person.order, person.x - 0.1, person.y + 0.1);
+    }
 }
 
 function Customer_findTable(customer) {
@@ -115,7 +120,7 @@ function Customer_takeAction(customer, peopleArrayIndex) {
                     }
                 }
             }
-        } 
+        }
     }
 }
 
@@ -204,9 +209,9 @@ function Server_takeAction(server) {
         if (Math.pow(savedata.grid[0].length - 2 - server.x, 2) + Math.pow(savedata.grid.length - 1.5 - server.y, 2) >= 1) {
             let angle = Math.atan2(savedata.grid.length - 1.5 - server.y, savedata.grid[0].length - 2 - server.x);
             server.x += 5 / 60.0 * Math.cos(angle);
-            server.y += 5 / 60.0 * Math.sin(angle); 
+            server.y += 5 / 60.0 * Math.sin(angle);
         }
-    } 
+    }
 }
 
 function Server_serve(server, table, item) {
