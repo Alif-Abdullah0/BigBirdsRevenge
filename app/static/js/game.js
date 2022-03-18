@@ -52,8 +52,14 @@ function nextframe() {
 		searchQueryDiv.textContent = drawGridBoolean ? 'Press 0 to search objects' : '';
 		searchResultsDiv.innerHTML = '';
 	}
+	if (framesTillNextMinute == 30 && Math.random() <= 0.05) {
+		for (let i = Math.trunc(Math.random() * 3) + 1; i > 0; i--) {
+			setTimeout(() => {savedata.people.push(new Customer());}, i * 1000);
+		}
+	}
+
 	savedata.people.forEach((person, index) => {
-		person.actionFunction(person, index);
+		peopleActionFunctions[person.personType](person, index);
 	});
 	drawPeople();
 

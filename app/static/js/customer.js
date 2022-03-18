@@ -1,16 +1,23 @@
+const peopleActionFunctions = {
+    'server' : Server_takeAction,
+    'customer' : Customer_takeAction,
+}
+
 function Customer() {
     this.personType = 'customer';
     this.happiness = 1.0;
     this.order = Object.keys(food)[Math.floor(Math.random() * Object.keys(food).length)];
+    this.orderTaken = false;
+    this.gotFood = false;
     this.table = null;
 
     this.x = 0.5;
     this.y = savedata.grid.length / 2;
+    
 
     //Technical
     this.framesPerAction = 60;
     this.framesTillNextAction = this.framesPerAction / 2;
-    this.actionFunction = Customer_takeAction;
     this.shirtColor = `rgb(${Math.floor(Math.random() * 255)}, ${Math.floor(Math.random() * 255)}, ${Math.floor(Math.random() * 255)})`;
 };
 
@@ -19,10 +26,10 @@ function customer_tip(customer) {
 }
 
 function drawPerson(person) {
-    if (person.personType == 'customer') {
-        ctx.fillStyle = person.shirtColor;
-    } else /* server */ {
+    if (person.personType == 'server') {
         ctx.fillStyle = 'rgb(0, 0, 0)';
+    } else {
+        ctx.fillStyle = person.shirtColor;
     }
     ctx.fillRect(person.x * 25 - 3, person.y * 25 - 1, 6, 10);
     ctx.beginPath();
@@ -51,89 +58,165 @@ function Customer_findTable(customer) {
 
 
 function Customer_takeAction(customer, peopleArrayIndex) {
-    if (--customer.framesTillNextAction != 0) {return;}
-    customer.framesTillNextAction = customer.framesPerAction;
-
     if (customer.table == null) {
-        if (customer.tableHeading == null && ((customer) => {Customer_findTable(customer);return customer.tableHeading != null})(customer)) {
+        if (customer.tableHeading == null) {
+            Customer_findTable(customer);
             //Customer_findTable(customer);
-        } else {
+        }
+        if (customer.tableHeading != null) {
             let angle = customer.tableHeading == null ? 0 : Math.atan2(customer.tableHeading.y + 0.5 - customer.y, customer.tableHeading.x + 0.5 - customer.x);
-            for (let i = 1; i < 60; i++) {
-                setTimeout((customer, moveangle) => {
-                if (customer.table == null) {
-                    if (customer.tableHeading == null) {
-                        Customer_findTable(customer);
-                        if (customer.tableHeading == null) {
-                            if (Math.pow(customer.y - 12, 2) + Math.pow(customer.x - 0.5, 2) < 1) {
-                                customer.happiness -= 0.001;
-                                if (customer.happiness <= 0) {
-                                    savedata.people.splice(peopleArrayIndex, 1);
-                                    delete customer;
-                                }
-                                return;
-                            }
-                            let angle = Math.atan2((11.5 + Math.random()) - customer.y, (0 + Math.random()) - customer.x, 2);
-                            if (angle < 0) {angle += 2 * Math.PI;}
-                            customer.x += 5 / 60.0 * Math.cos(angle);
-                            customer.y += 5 / 60.0 * Math.sin(angle)
-                        }
-                        return;
-                    }
-                    if (customer.tableHeading.customerSitting != null) {
-                        customer.tableHeading = null;
-                        return;
-                    }
-                    customer.x += 5 / 60.0 * Math.cos(moveangle);
-                    customer.y += 5 / 60.0 * Math.sin(moveangle);
-                    if (Math.pow(customer.tableHeading.x + 0.5 - customer.x, 2) + Math.pow(customer.tableHeading.y + 0.5 - customer.y, 2) <= 0.0625) {
-                        customer.table = customer.tableHeading;
-                        customer.x = 0.5 + customer.table.x;
-                        customer.y = 0.5 + customer.table.y;
-                        customer.table.customerSitting = customer;
-                        customer.tableHeading = null;
-                    }
+            if (customer.table == null) {
+                if (customer.tableHeading.customerSitting != null) {
+                    customer.tableHeading = null;
+                    return;
                 }
-                }, Math.trunc(1000 * i / 60.0), customer, angle);
+                customer.x += 5 / 60.0 * Math.cos(angle);
+                customer.y += 5 / 60.0 * Math.sin(angle);
+                if (Math.pow(customer.tableHeading.x + 0.5 - customer.x, 2) + Math.pow(customer.tableHeading.y + 0.5 - customer.y, 2) <= 0.0625) {
+                    customer.table = customer.tableHeading;
+                    customer.x = 0.5 + customer.table.x;
+                    customer.y = 0.5 + customer.table.y;
+                    customer.table.customerSitting = customer;
+                    customer.tableHeading = null;
+                }
             }
+        } else {
+            if (Math.pow(customer.y - 12, 2) + Math.pow(customer.x - 0.5, 2) < 1) {
+                customer.happiness -= 0.001;
+                if (customer.happiness <= 0) {
+                    savedata.people.splice(peopleArrayIndex, 1);
+                    delete customer;
+                }
+                return;
+            }
+            let angle = Math.atan2((11.5 + Math.random()) - customer.y, (0 + Math.random()) - customer.x, 2);
+            if (angle < 0) {angle += 2 * Math.PI;}
+            customer.x += 5 / 60.0 * Math.cos(angle);
+            customer.y += 5 / 60.0 * Math.sin(angle);
         }
     } else {
-        // Order food? 
+        if (customer.gotFood == true) {
+            if (customer.eatingTime == null) {
+                customer.eatingTime = 600;
+            } else {
+                if (customer.eatingTime > 0) {
+                    customer.eatingTime--;
+                    return;
+                } else {
+                    if (customer.table.customerSitting == customer) {
+                        customer.table.customerSitting = null;
+                    }
+                    let angle = Math.atan2(12 - customer.y, 0.5 - customer.x);
+                    customer.x += 5 / 60.0 * Math.cos(angle);
+                    customer.y += 5 / 60.0 * Math.sin(angle);
+                    if (Math.pow(0.5 - customer.x, 2) + Math.pow(12 - customer.y, 2) <= 0.25) {
+                        savedata.people.splice(peopleArrayIndex, 1);
+                        delete customer;
+                    }
+                }
+            }
+        } 
     }
 }
 
 function Server() {
-  this.personType = 'server';
-  this.orders = null;
-  this.holding = null;
-  this.task = false;
-  this.tableNum = -1;
-  this.x = savedata.grid[0].length - 2;
-  this.y = savedata.grid.length - 1.5;
+    this.personType = 'server';
+    this.orders = null;
+    this.holding = null;
+    //this.task = false;
+    //this.tableNum = -1;
+    this.x = savedata.grid[0].length - 2;
+    this.y = savedata.grid.length - 1.5;
 
-  // Technical
-  this.framesPerAction = 10;
-  this.framesTillNextAction = this.framesPerAction;
-  this.actionFunction = Server_takeAction;
+    this.customerServing = null;
+
 };
 
+function Server_findCustomer(server) {
+    for (let i = 0; i < savedata.people.length; i++) {
+        if (savedata.people[i].personType !== 'customer') { continue; }
+        if (savedata.people[i].table != null && savedata.people[i].orderTaken == false) {
+            server.customerServing = savedata.people[i];
+            break;
+        }
+    }
+}
+
+function Server_findFood(server) {
+    for (let i = 0; i < savedata.counters.length; i++) {
+        if (true /*savedata.counters[i].food != null && savedata.counters[i].food == server.orders*/) {
+            server.foodCounter = savedata.counters[i];
+            break;
+        }
+    }
+}
+
 function Server_takeAction(server) {
-  if (--server.framesTillNextAction != 0) {return;}
-  server.framesTillNextAction = server.framesPerAction;
+    if (server.customerServing == null) {
+        Server_findCustomer(server);
+    }
+    if (server.customerServing != null) {
+        if (server.customerServing.gotFood == true || (server.customerServing.orderTaken == true && server.orders == null)) {
+            server.customerServing = null;
+            server.orders = null;
+            return;
+        }
+        if (server.customerServing.orderTaken == false) {
+            if (Math.pow(server.x - server.customerServing.x, 2) + Math.pow(server.y - server.customerServing.y, 2) <= 0.25) {
+                server.orders = server.customerServing.order;
+                //console.log(server.customerServing.order);
+                server.customerServing.orderTaken = true;
+            } else {
+                let angle = Math.atan2(server.customerServing.y - server.y, server.customerServing.x - server.x);
+                server.x += 5 / 60.0 * Math.cos(angle);
+                server.y += 5 / 60.0 * Math.sin(angle);
+            }
+        } else {
+            if (server.holding == null) {
+                if (server.foodCounter == null) {
+                    Server_findFood(server);
+                }
+                if (server.foodCounter != null) {
+                    let angle = Math.atan2(server.foodCounter.y - server.y, server.foodCounter.x + 0.5 - server.x);
+                    server.x += 5 / 60.0 * Math.cos(angle);
+                    server.y += 5 / 60.0 * Math.sin(angle);
+                    if (Math.pow(server.foodCounter.y - server.y, 2) + Math.pow(server.foodCounter.x + 0.5 - server.x, 2) <= 0.0625) {
+                        server.holding = server.orders;
+                        server.foodCounter = null;
+                    }
+                }
+            } else {
+                // Bring food back to customer
+                if (Math.pow(server.x - server.customerServing.x, 2) + Math.pow(server.y - server.customerServing.y, 2) <= 0.25) {
+                    server.customerServing.gotFood = true;
+                    savedata.money += food[server.orders];
+                    server.orders = null;
+                    server.customerServing = null;
+                    server.holding = null;
+                } else {
+                    let angle = Math.atan2(server.customerServing.y - server.y, server.customerServing.x - server.x);
+                    server.x += 5 / 60.0 * Math.cos(angle);
+                    server.y += 5 / 60.0 * Math.sin(angle);
+                }
+            }
+        }
+    } else {
+        if (Math.pow(savedata.grid[0].length - 2 - server.x, 2) + Math.pow(savedata.grid.length - 1.5 - server.y, 2) >= 1) {
+            let angle = Math.atan2(savedata.grid.length - 1.5 - server.y, savedata.grid[0].length - 2 - server.x);
+            server.x += 5 / 60.0 * Math.cos(angle);
+            server.y += 5 / 60.0 * Math.sin(angle); 
+        }
+    } 
 }
 
 function Server_serve(server, table, item) {
-  server.holding = item;
-  server.task = true;
-  server.tableNum = table;
 }
 
 function Server_takeOrder(server, table) {
-  orders = cust_getOrder(chair_Cust(table_Chairs(table)));
-  return orders;
+    orders = cust_getOrder(chair_Cust(table_Chairs(table)));
+    return orders;
 }
 
 function make_Food(server) {
-  console.log(server.orders);
-  console.log(savedata);
+    console.log(server.orders);
 }

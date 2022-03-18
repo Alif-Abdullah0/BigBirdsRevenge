@@ -17,6 +17,7 @@ async function saveRequest(s) {
 
 async function save() {
 	localStorage['save'] = JSON.stringify(compactSaveData());
+	localStorage['saveuser'] = user;
 	console.log('Saved to localStorage!');
     saveRequest(localStorage['save'])
 	.then(data => {
@@ -35,7 +36,7 @@ async function loadRequest() {
 }
 
 async function load() {
-	if ('save' in localStorage) {
+	if ('save' in localStorage && localStorage.getItem('saveuser') === user) {
 		savedata = JSON.parse(localStorage['save']);
 		console.log('Loaded save from localStorage!');
 	} else {
@@ -59,13 +60,24 @@ function expandLoadedSave() {
 	}
 	savedata.counters = [];
 
-	let savelayout = savedata.layout;
+	let savelayout = [];
+	Object.assign(savelayout, savedata.layout);
 	savedata.layout = [];
-	for (i in savelayout) {
+	for (let i = 0; i < savelayout.length; i++) {
 		//console.log(savelayout[i]);
 		switch (savelayout[i].id) {
-			case 0:
 			case 1:
+				objectTypeList[savelayout[i].id][2](savelayout[i].x, savelayout[i].y);
+				if (savelayout[i].customerSitting != null) {
+					//console.log("customerSitting");
+					let cust = savelayout[i].customerSitting;
+					cust.table = savedata.layout[savedata.layout.length - 1];
+					cust.table.customerSitting = cust;
+					savedata.people.push(cust);
+					//console.log(cust);
+				}
+				break;
+			case 0:
 			case 2:
 				objectTypeList[savelayout[i].id][2](savelayout[i].x, savelayout[i].y);
 				break;
@@ -77,8 +89,8 @@ function expandLoadedSave() {
 }
 
 function compactSaveData() {
-	let tosave = {money : savedata.money, layout : [], people : savedata.people, igt : savedata.igt};
-	for (i = 0; i < savedata.layout.length; i++) {
+	let tosave = {money : savedata.money, layout : [], people : [], igt : savedata.igt};
+	for (let i = 0; i < savedata.layout.length; i++) {
 		tosave.layout[i] = Object();
 		Object.assign(tosave.layout[i], savedata.layout[i]);
 		let elem = tosave.layout[i];
@@ -88,7 +100,15 @@ function compactSaveData() {
 				break;
 			case 1:
 				delete elem.tableOwner;
+				if (elem.customerSitting != null) {
+					elem.customerSitting.table = null;
+				}
 				break;
+		}
+	}
+	for (let i = 0; i < savedata.people.length; i++) {
+		if (savedata.people[i].personType == 'server') {
+			tosave.people.push(savedata.people[i]);
 		}
 	}
 	console.log(tosave);

@@ -28,7 +28,8 @@
 		</center>
 	</div>
 	<script>
-		var promptSave = ({% if saveavailable %}true{% else %}false{% endif %}) || 'save' in localStorage;
+		const user = '{% if user %}user{% endif %}';
+		const promptSave = (({% if saveavailable %}true{% else %}false{% endif %}) || 'save' in localStorage) && user === localStorage.getItem('saveuser');
 	</script>
 	<script type='application/javascript' src='/static/js/save.js'></script>
 	<script type='application/javascript' src='/static/js/game.js'></script>
