@@ -59,6 +59,7 @@ function expandLoadedSave() {
 		savedata.grid[i] = Array(800 / 25);
 	}
 	savedata.counters = [];
+	savedata.people = [];
 
 	let savelayout = [];
 	Object.assign(savelayout, savedata.layout);
@@ -99,6 +100,9 @@ function compactSaveData() {
 				delete elem.chairsAttached;
 				break;
 			case 1:
+				if (elem.customerSitting != null) {
+					elem.customerSitting.table = null;
+				} 	
 				delete elem.tableOwner;
 				if (elem.customerSitting != null) {
 					elem.customerSitting.table = null;
