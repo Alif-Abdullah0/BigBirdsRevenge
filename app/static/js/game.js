@@ -140,7 +140,7 @@ function includesInArray(string, arr) {
 
 function genObjectSearchResults() {
 	searchResultsDiv.innerHTML = '<hr>';
-	let terms = searching.split(' ');
+	let terms = searching.toLowerCase().split(' ');
 	objectTypeList.forEach((objectDef, index) => {
 		let searchedFor = (searching.trim() == '') ? true : includesInArray(objectDef[1], terms);
 		if (searchedFor) {
@@ -152,6 +152,7 @@ function genObjectSearchResults() {
 				console.log(e.target.parentElement.id);
 				selectedObjectIndex = parseInt(e.target.parentElement.id.substring('objectTypeDef_'.length));
 				searchingBoolean = false;
+				searching = '';
 			};
 			searchResultsDiv.appendChild(newp);
 			searchResultsDiv.appendChild(document.createElement('hr'));
@@ -182,7 +183,7 @@ document.addEventListener('keydown', (e) => {
 	if (drawGridBoolean && e.keyCode == 0x30 /*ord('0')*/) {
 		searchingBoolean = searchingBoolean ? false : true;
 		genObjectSearchResults();
-	} else {
+	} else if (drawGridBoolean) {
 		if (searchingBoolean) {
 			let queryChanged = true;
 			if (e.keyCode == 0x20 || (e.keyCode >= ord('A') && e.keyCode <= ord('Z'))) {
@@ -193,6 +194,17 @@ document.addEventListener('keydown', (e) => {
 				} else {
 					queryChanged = false;
 				}
+			} else if (e.keyCode == 0xD) {
+				queryChanged = false;
+				let ch = searchResultsDiv.children[1];
+				if (ch != undefined &&  ch.id.includes('objectTypeDef_')) {
+					selectedObjectIndex = parseInt(ch.id.substring('objectTypeDef_'.length));
+				} else {
+					selectedObjectIndex = -1;
+				}
+				searching = '';
+				searchingBoolean = false;
+				
 			} else {
 				queryChanged = false;
 			}
@@ -218,6 +230,12 @@ document.addEventListener('keydown', (e) => {
 				case 39: /* Right */
 					cursorX = Math.min(cursorX + 1, savedata.grid[0].length - 1);
 					break;
+				case ord('T'):
+					drawGridBoolean = false;
+					break;
+				case ord('U'):
+					selectedObjectIndex = -1;
+					break;
 				case ord('I'):
 					if (selectedObjectIndex != -1) {
 						if (savedata.money >= objectTypeList[selectedObjectIndex][4]) {
@@ -234,6 +252,13 @@ document.addEventListener('keydown', (e) => {
 					break;
 					console.log(e);
 			}
+		}
+	} else {
+		if (e.keyCode == ord('T')) {
+			drawGridBoolean = true;
+			searchingBoolean = false;
+			selectedObjectIndex = -1;
+			searching = '';
 		}
 	}
 });

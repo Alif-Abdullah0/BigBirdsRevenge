@@ -59,7 +59,6 @@ function expandLoadedSave() {
 		savedata.grid[i] = Array(800 / 25);
 	}
 	savedata.counters = [];
-	savedata.people = [];
 
 	let savelayout = [];
 	Object.assign(savelayout, savedata.layout);
@@ -101,18 +100,26 @@ function compactSaveData() {
 				break;
 			case 1:
 				if (elem.customerSitting != null) {
+					let saveCust = {};
+					Object.assign(saveCust, elem.customerSitting);
+					if (saveCust.gotFood == false) {
+						saveCust.orderTaken = false;
+					}
+					elem.customerSitting = saveCust;
 					elem.customerSitting.table = null;
 				} 	
 				delete elem.tableOwner;
-				if (elem.customerSitting != null) {
-					elem.customerSitting.table = null;
-				}
 				break;
 		}
 	}
 	for (let i = 0; i < savedata.people.length; i++) {
 		if (savedata.people[i].personType == 'server') {
-			tosave.people.push(savedata.people[i]);
+			let saveServer = {};
+			Object.assign(saveServer, savedata.people[i]);
+			saveServer.orders = null;
+			saveServer.holding = null;
+			saveServer.customerServing = null;
+			tosave.people.push(saveServer);
 		}
 	}
 	console.log(tosave);
