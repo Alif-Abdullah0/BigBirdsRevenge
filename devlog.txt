@@ -38,3 +38,6 @@ wrote code that randomized the shirt color of each customer.
 
 williamC -- 03/17/22 9:12
 Wrote code for customers to choose what to eat when they spawn. Made food dict.
+
+alifA -- 3/20/22 16:39
+Lost my sanity to the great white shark lords of Digital Ocean Droplet attempting to try and host our site on a personal droplet.
