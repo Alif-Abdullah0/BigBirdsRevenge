@@ -249,6 +249,17 @@ document.addEventListener('keydown', (e) => {
 				case 39: /* Right */
 					cursorX = Math.min(cursorX + 1, savedata.grid[0].length - 1);
 					break;
+				case ord('E'):
+					if (selectedObjectIndex != -1) {
+						selectedObjectIndex = (selectedObjectIndex + 1) % objectTypeList.length;
+					}
+					break;
+				case ord('Q'):
+					if (selectedObjectIndex != -1) {
+						selectedObjectIndex--;
+						if (selectedObjectIndex < 0) {selectedObjectIndex = objectTypeList.length - 1;}
+					}
+					break;
 				case ord('T'):
 					drawGridBoolean = false;
 					break;
