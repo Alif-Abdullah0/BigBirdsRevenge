@@ -48,5 +48,15 @@ function drawFood(food, x, y) {
             ctx.fill();
             ctx.stroke();
             break;
+        case "burger":
+            ctx.fillStyle = '#d58b44';
+            ctx.beginPath();
+            ctx.ellipse(x * 25, y * 25 - 3, 3, 2, 0, 0, 2 * Math.PI);
+            ctx.fill();
+            // ctx.arc(x * 25, y * 25 - 4, 3, Math.PI, 2 * Math.PI);
+            // ctx.fill();
+            ctx.fillStyle = '#a53f29';
+            ctx.fillRect(x * 25 - 3, y * 25 - 4, 6, 1);
+            break;
     }
 }
