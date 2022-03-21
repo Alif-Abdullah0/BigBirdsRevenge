@@ -59,6 +59,7 @@ function expandLoadedSave() {
 		savedata.grid[i] = Array(800 / 25);
 	}
 	savedata.counters = [];
+	savedata.people = [];
 
 	let savelayout = [];
 	Object.assign(savelayout, savedata.layout);
@@ -89,7 +90,7 @@ function expandLoadedSave() {
 }
 
 function compactSaveData() {
-	let tosave = {money : savedata.money, layout : [], people : [], igt : savedata.igt};
+	let tosave = {money : savedata.money, layout : [], igt : savedata.igt};
 	for (let i = 0; i < savedata.layout.length; i++) {
 		tosave.layout[i] = Object();
 		Object.assign(tosave.layout[i], savedata.layout[i]);
@@ -110,16 +111,6 @@ function compactSaveData() {
 				} 	
 				delete elem.tableOwner;
 				break;
-		}
-	}
-	for (let i = 0; i < savedata.people.length; i++) {
-		if (savedata.people[i].personType == 'server') {
-			let saveServer = {};
-			Object.assign(saveServer, savedata.people[i]);
-			saveServer.orders = null;
-			saveServer.holding = null;
-			saveServer.customerServing = null;
-			tosave.people.push(saveServer);
 		}
 	}
 	console.log(tosave);

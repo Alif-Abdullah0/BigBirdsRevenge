@@ -63,6 +63,26 @@ function Customer_findTable(customer) {
 
 
 function Customer_takeAction(customer, peopleArrayIndex) {
+    if (savedata.igt[0] >= 22) {
+        if (customer.table != null) {
+            customer.table.customerSitting = null;
+            customer.table = null;
+            for (let i = 0; i < savedata.people.length; i++) {
+                if (savedata.people[i].personType == 'server' && savedata.people[i].customerServing == customer) {
+                    savedata.people[i].customerServing = null;
+                    savedata.people[i].orders = null;
+                    savedata.people[i].holding = null;
+                }
+            }
+            let angle = Math.atan2(12 - customer.y, 0.5 - customer.x);
+            customer.x += 5 / 60.0 * Math.cos(angle);
+            customer.y += 5 / 60.0 * Math.sin(angle);
+            if (Math.pow(12 - customer.y, 2) + Math.pow(0.5 - customer.x, 2) <= 0.25) {
+                savedata.people.splice(peopleArrayIndex, 1);
+                delete customer;
+            }
+        }
+    }
     if (customer.table == null) {
         if (customer.tableHeading == null) {
             Customer_findTable(customer);

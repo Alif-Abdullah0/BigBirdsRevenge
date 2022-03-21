@@ -9,6 +9,10 @@ var selectedObjectIndex = -1;
 
 function canBuild(object) {
 	//console.log(object);
+	if (object.x <= 4 && object.y >= 8 && object.y <= 14) {
+		return false;
+	}
+
 	if (savedata.grid[object.y][object.x] == null) {
 		return true;
 	} else {
@@ -131,6 +135,9 @@ function createCounter(x, y) {
 
 	if (Build(newCounter) == 1) {return 1;}
     savedata.counters.push(newCounter);
+	if (savedata.counters.length >= 4) {
+		savedata.people.push(new Server());
+	}
 	return 0;
 }
 
