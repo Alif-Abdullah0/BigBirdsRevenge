@@ -37,7 +37,7 @@ var searching = '';
 
 function nextframe() {
 	ctx.clearRect(0,0,c.clientWidth,c.clientHeight);
-	ctx.fillStyle = '#a30000';
+	ctx.fillStyle = '#ff0038';
 	ctx.fillRect(0, 8 * 25, 5 * 25, 7 * 25);
 	for (index in savedata.layout) {
 		object = savedata.layout[index];
@@ -54,7 +54,7 @@ function nextframe() {
 		searchQueryDiv.textContent = drawGridBoolean ? 'Press 0 to search objects' : '';
 		searchResultsDiv.innerHTML = '';
 	}
-	if ((savedata.igt[0] >= 8 && savedata.igt[0] < 21) && framesTillNextMinute == 30 && Math.random() <= 0.05 * Math.pow(savedata.layout.length, 0.25)) {
+	if ((savedata.igt[0] >= 8 && savedata.igt[0] < 21) && framesTillNextMinute == 30 && Math.random() <= 0.05 * Math.pow(savedata.layout.length, 0.5) / 3) {
 		for (let i = Math.trunc(Math.random() * 3) + 1; i > 0; i--) {
 			setTimeout(() => {savedata.people.push(new Customer());}, i * 1000);
 		}
@@ -70,7 +70,7 @@ function nextframe() {
 		dummy = "&nbsp;" + dummy;
 	}
 	moneyCounter.innerHTML = "Money:&nbsp;" + dummy;
-	timeCounter.innerHTML = "Time: " + (savedata.igt[0] < 10 ? '0' : '') + savedata.igt[0] + ':' + (savedata.igt[1] < 10 ? '0' : '') + savedata.igt[1] + " " + (savedata.igt[0] >= 8 && savedata.igt[0] < 21 ? '🌞' : '🌙');
+	timeCounter.innerHTML = "Time: " + (savedata.igt[0] < 10 ? '0' : '') + savedata.igt[0] + ':' + (savedata.igt[1] < 10 ? '0' : '') + savedata.igt[1] + " " + getTimeEmoji(savedata.igt[0]);
 	if (savedata.igt[0] < 8 || savedata.igt[0] >= 22) {
 		framesTillNextMinute = Math.min(0, framesTillNextMinute - 8);
 	}
@@ -252,6 +252,14 @@ document.addEventListener('keydown', (e) => {
 				case ord('T'):
 					drawGridBoolean = false;
 					break;
+				case ord(';'):
+					if (e.key == ':' && savedata.grid[cursorY][cursorX] != null) {
+						let obj = savedata.grid[cursorY][cursorX];
+						if (confirm(`Are you sure you want to delete the ${obj.name} at X: ${cursorX}, Y : ${cursorY} ?`)) {
+							deleteObject(obj);
+						}
+					}
+					break;
 				case ord('U'):
 					selectedObjectIndex = -1;
 					break;
@@ -293,7 +301,6 @@ function startgame() {
 	createCounter(29,23);
 	createCounter(30,23);
 	createCounter(31,23);
-	createCounter(27,23);
 
 	window.requestAnimationFrame(nextframe);
 }

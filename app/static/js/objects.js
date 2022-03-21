@@ -1,10 +1,10 @@
 const objectTypeList = [
-	/* id name constructor constructorArgs  */
+	/* id name constructor draw cost  */
 	[0, "table", createTable, drawTable, 200],
 	[1, "chair", createChair, drawChair, 100],
 	[2, "kitchen counter", createCounter, drawCounter, 500],
 ];
-objectTypeList.sort(); 
+objectTypeList.sort();
 var selectedObjectIndex = -1;
 
 function canBuild(object) {
@@ -56,11 +56,11 @@ function createTable(x, y) {
 	if (!canBuild(newtable)) {
 		return 1;
 	}
-	let possArray = [savedata.grid[y][x-1], savedata.grid[y][x+1]];
+	let possArray = [savedata.grid[y][x - 1], savedata.grid[y][x + 1]];
 	if (y > 0) {
-		possArray.push(savedata.grid[y-1][x]);
+		possArray.push(savedata.grid[y - 1][x]);
 	} else if (y < savedata.grid.length - 1) {
-		possArray.push(savedata.grid[y+1][x]);
+		possArray.push(savedata.grid[y + 1][x]);
 	}
 	for (i in possArray) {
 		if (possArray[i] != null && possArray[i].id == 1) {
@@ -77,9 +77,9 @@ function createTable(x, y) {
 }
 
 function drawTable(table, alpha = 1.0) {
-    //console.log(`rgb(150,75,0,${alpha})`);
-    ctx.fillStyle = `rgb(150,75,0,${alpha})`;
-    ctx.fillRect(table.x * 25, table.y * 25, 25, 25);
+	//console.log(`rgb(150,75,0,${alpha})`);
+	ctx.fillStyle = `rgb(150,75,0,${alpha})`;
+	ctx.fillRect(table.x * 25, table.y * 25, 25, 25);
 }
 
 function createChair(x, y, forcebuild) {
@@ -87,12 +87,12 @@ function createChair(x, y, forcebuild) {
 	if (!canBuild(newchair)) {
 		return 1;
 	}
-	let possArray = [savedata.grid[y][x-1], savedata.grid[y][x+1]];
+	let possArray = [savedata.grid[y][x - 1], savedata.grid[y][x + 1]];
 	if (y > 0) {
-		possArray.push(savedata.grid[y-1][x]);
+		possArray.push(savedata.grid[y - 1][x]);
 	}
 	if (y < savedata.grid.length - 1) {
-		possArray.push(savedata.grid[y+1][x]);
+		possArray.push(savedata.grid[y + 1][x]);
 	}
 	let addArray = []
 	for (i in possArray) {
@@ -109,16 +109,16 @@ function createChair(x, y, forcebuild) {
 		newchair.tableOwner = addArray[0];
 		addArray[0].chairsAttached.push(newchair);
 	} else {
-		if (!forcebuild && !confirm("This chair is not next to any table. Are you sure you want to build this?")) {return 2;}
+		if (!forcebuild && !confirm("This chair is not next to any table. Are you sure you want to build this?")) { return 2; }
 		newchair.tableOwner = null;
 	}
 	newchair.customerSitting = null;
-	if (Build(newchair) == 1)  {return 1;}
+	if (Build(newchair) == 1) { return 1; }
 	return 0;
 }
 
 function drawChair(chair, alpha = 1.0) {
-    ctx.fillStyle = `rgba(150,75,0,${alpha})`;
+	ctx.fillStyle = `rgba(150,75,0,${alpha})`;
 	ctx.beginPath();
 	ctx.arc(chair.x * 25 + 12.5, chair.y * 25 + 12.5, 10, 0, 2 * Math.PI);
 	ctx.fill();
@@ -127,24 +127,77 @@ function drawChair(chair, alpha = 1.0) {
 }
 
 function createCounter(x, y) {
-	if (y != savedata.grid.length - 1) {return 1;}
+	if (y != savedata.grid.length - 1) { return 1; }
 
 	let newCounter = new FurniturePrototype(x, y, 2);
-	if (!canBuild(newCounter)) {return 1;}
+	if (!canBuild(newCounter)) { return 1; }
 	newCounter.holding = undefined;
 
-	if (Build(newCounter) == 1) {return 1;}
-    savedata.counters.push(newCounter);
-	if (savedata.counters.length >= 4) {
+	if (Build(newCounter) == 1) { return 1; }
+	savedata.counters.push(newCounter);
+	if (savedata.counters.length >= 3) {
 		savedata.people.push(new Server());
 	}
 	return 0;
 }
 
 function drawCounter(counter, alpha = 1.0) {
-    ctx.fillStyle = `rgba(142, 142, 142, ${alpha})`;
+	ctx.fillStyle = `rgba(142, 142, 142, ${alpha})`;
 	ctx.fillRect(counter.x * 25, counter.y * 25, 25, 25);
 	if (counter.food != null) {
 		// draw food
 	}
+}
+
+function deleteObject(obj) {
+	savedata.money += objectTypeList[obj.id][4];
+	// counter
+	if (obj.id == 2) {
+		for (let i = 0; i < savedata.counters.length; i++) {
+			if (savedata.counters[i] == obj) {
+				savedata.counters.splice(i, 1);
+				break;
+			}
+		}
+		for (let i = 0; i < savedata.people.length; i++) {
+			if (savedata.people[i].personType == 'server') {
+				let serv = savedata.people[i];
+				if (serv.customerServing != null) {
+					serv.customerServing.orderTaken = false;
+				}
+				savedata.people.splice(i, 1);
+				delete serv;
+				break;
+			}
+		}
+	} else if (obj.id == 1) {
+		// Remove reference to chair from table
+		for (let i = 0; i < obj.tableOwner.chairsAttached.length; i++) {
+			if (obj.tableOwner.chairsAttached[i] == obj) {
+				obj.tableOwner.chairsAttached.splice(i,1);
+				break;
+			}
+		}
+		if (obj.customerSitting != null) {
+			if (obj.customerSitting.gotFood == true) {
+				obj.customerSitting.table = Object();
+			} else {
+				obj.customerSitting.table = null;
+				obj.customerSitting.orderTaken = false;
+				obj.customerSitting.happiness -= 0.2;
+			}
+		}
+	} else if (obj.id == 0) {
+		for (let i = 0; i < obj.chairsAttached.length; i++) {
+			obj.chairsAttached[i].tableOwner = null;
+		}
+	}
+
+	for (let i = 0; i < savedata.layout.length; i++) {
+		if (savedata.layout[i] == obj) {
+			savedata.layout.splice(i, 1);
+			break;
+		}
+	}
+	delete obj;
 }
