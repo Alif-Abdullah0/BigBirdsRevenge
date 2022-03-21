@@ -63,10 +63,12 @@ function Customer_findTable(customer) {
 
 
 function Customer_takeAction(customer, peopleArrayIndex) {
-    if (savedata.igt[0] >= 22) {
-        if (customer.table != null) {
+    if (savedata.igt[0] >= 21) {
+        if (savedata.igt[0] >= 22 && customer.table != null) {
             customer.table.customerSitting = null;
             customer.table = null;
+        } // If after 22:00 customers leave whether they have tables
+        if (customer.table == null) {
             for (let i = 0; i < savedata.people.length; i++) {
                 if (savedata.people[i].personType == 'server' && savedata.people[i].customerServing == customer) {
                     savedata.people[i].customerServing = null;
@@ -81,6 +83,7 @@ function Customer_takeAction(customer, peopleArrayIndex) {
                 savedata.people.splice(peopleArrayIndex, 1);
                 delete customer;
             }
+            return;
         }
     }
     if (customer.table == null) {

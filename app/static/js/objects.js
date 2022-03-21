@@ -172,10 +172,12 @@ function deleteObject(obj) {
 		}
 	} else if (obj.id == 1) {
 		// Remove reference to chair from table
-		for (let i = 0; i < obj.tableOwner.chairsAttached.length; i++) {
-			if (obj.tableOwner.chairsAttached[i] == obj) {
-				obj.tableOwner.chairsAttached.splice(i,1);
-				break;
+		if (obj.tableOwner != null) {
+			for (let i = 0; i < obj.tableOwner.chairsAttached.length; i++) {
+				if (obj.tableOwner.chairsAttached[i] == obj) {
+					obj.tableOwner.chairsAttached.splice(i,1);
+					break;
+				}
 			}
 		}
 		if (obj.customerSitting != null) {
@@ -199,5 +201,7 @@ function deleteObject(obj) {
 			break;
 		}
 	}
+
+	savedata.grid[obj.y][obj.x] = undefined;
 	delete obj;
 }
