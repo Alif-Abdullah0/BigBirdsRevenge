@@ -44,3 +44,6 @@ Lost my sanity to the great white shark lords of Digital Ocean Droplet attemptin
 
 cameronN -- 3/21/22 9:03
 Fixed some delete and time-related code
+
+alifA -- 3/22/22 05:38
+Bested the great white shark lords. Added our site to my personal Digital Ocean Droplet

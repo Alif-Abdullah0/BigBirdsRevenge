@@ -1,4 +1,4 @@
-# Team Big Birds -- Cameron Nelson, Sophie Liu, Alif Abdullah
+# Team Big Birds -- Cameron Nelson, Sophie Liu, Alif Abdullah, William Chen
 # Softdev Pd 2
 # p2
 # 2022-03-02
