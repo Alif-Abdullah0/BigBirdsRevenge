@@ -44,6 +44,6 @@ Website should be found here [127.0.0.1:5000/](http://127.0.0.1:5000/)
 P02 for SoftDev
 
 ---
-# YEOOOO
-## Our game works on our droplet
+# [Insert Professional Looking Heading]
+## We would like to inform you all, our shareholders, that our website does, indeed, work on our personal droplet.
 Check us out here!: [Such Link. Much Wow.](67.207.86.57)
