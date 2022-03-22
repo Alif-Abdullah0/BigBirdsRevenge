@@ -38,6 +38,7 @@ async function loadRequest() {
 async function load() {
 	if ('save' in localStorage && localStorage.getItem('saveuser') === user) {
 		savedata = JSON.parse(localStorage['save']);
+		expandLoadedSave();
 		console.log('Loaded save from localStorage!');
 	} else {
 		loadRequest()
@@ -45,18 +46,18 @@ async function load() {
 			console.log(data.valueOf());
 			if (data.status == 'good') {
 				savedata = JSON.parse(data.save);
+				expandLoadedSave();
 			} else {
 				console.log('No saved game!');
 			}
 		});
 	}
-	expandLoadedSave();
 }
 
 function expandLoadedSave() {
-	savedata.grid = Array(600 / 25);
-	for (i = 0; i < savedata.grid.length; i++) {
-		savedata.grid[i] = Array(800 / 25);
+	savedata.grid = [];
+	for (let i = 0; i < 24; i++) {
+		savedata.grid.push(Array(32));
 	}
 	savedata.counters = [];
 	savedata.people = [];
@@ -90,7 +91,7 @@ function expandLoadedSave() {
 }
 
 function compactSaveData() {
-	let tosave = {money : savedata.money, layout : [], igt : savedata.igt};
+	let tosave = {money : savedata.money, layout : [], people : [], igt : savedata.igt};
 	for (let i = 0; i < savedata.layout.length; i++) {
 		tosave.layout[i] = Object();
 		Object.assign(tosave.layout[i], savedata.layout[i]);

@@ -34,12 +34,19 @@
 			placeholder="Password"
 		  />
 		  <label for="floatingPassword">Password</label>
+		  <input id="save_input" type="hidden" name="currentsave" />
 		</div>
 		<button class="w-50 btn btn-lg btn-primary" style="margin-left:25%;" type="submit">
 			{{ name }}
 		</button>
 	</div>
   </form>
+  {% if name == 'Sign Up' %}
+  	<script> 
+	console.log("Hello World"); 
+	if (localStorage.saveuser == '') {document.getElementById("save_input").value = localStorage.getItem("save");}
+	</script>
+  {% endif %}
 </div>
 </main>
 {% endblock %}

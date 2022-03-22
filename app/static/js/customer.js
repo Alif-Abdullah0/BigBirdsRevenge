@@ -40,6 +40,15 @@ function drawPerson(person) {
         drawFood(person.holding, person.x - 0.1, person.y);
     } else if (person.personType == 'customer' && person.gotFood && person.eatingTime > 0) {
         drawFood(person.order, person.x - 0.1, person.y + 0.1);
+        if (person.eatingTime > 600 - 60) {
+            ctx.fillStyle = 'green';
+            ctx.fillRect(person.x *  25 - 1, person.y * 25 - 22.5, 10, 6);
+            ctx.fillRect(person.x * 25 - 8, person.y * 25 - 22.5, 2, 8);
+            ctx.fillRect(person.x * 25 - 11, person.y * 25 - 19.5, 8, 2);
+            ctx.fillStyle = 'lawngreen';
+            ctx.font = '5px Arial';
+            ctx.fillText('$',person.x * 25 + 2, person.y * 25 - 17.5);
+        }
     }
 }
 
@@ -172,7 +181,8 @@ function Server_findCustomer(server) {
 
 function Server_findFood(server) {
     for (let i = 0; i < savedata.counters.length; i++) {
-        if (true /*savedata.counters[i].food != null && savedata.counters[i].food == server.orders*/) {
+        if (savedata.counters[i].food == null) {
+            savedata.counters[i].food = server.orders;
             server.foodCounter = savedata.counters[i];
             break;
         }
@@ -210,6 +220,7 @@ function Server_takeAction(server) {
                     server.y += 5 / 60.0 * Math.sin(angle);
                     if (Math.pow(server.foodCounter.y - server.y, 2) + Math.pow(server.foodCounter.x + 0.5 - server.x, 2) <= 0.0625) {
                         server.holding = server.orders;
+                        server.foodCounter.food = null;
                         server.foodCounter = null;
                     }
                 }

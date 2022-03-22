@@ -147,6 +147,7 @@ function drawCounter(counter, alpha = 1.0) {
 	ctx.fillRect(counter.x * 25, counter.y * 25, 25, 25);
 	if (counter.food != null) {
 		// draw food
+		drawFood(counter.food, counter.x + 0.5, counter.y + 0.5)
 	}
 }
 
