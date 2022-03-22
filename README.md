@@ -46,4 +46,4 @@ P02 for SoftDev
 ---
 # [Insert Professional Looking Heading]
 ## We would like to inform you all, our shareholders, that our website does, indeed, work on our personal droplet.
-Check us out here!: [Such Link. Much Wow.](67.207.86.57)
+Check us out here!: [Such Link. Much Wow.](http://67.207.86.57/)
