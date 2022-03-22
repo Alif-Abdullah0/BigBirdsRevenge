@@ -33,11 +33,6 @@ If you are using Windows, do the following:
 If that works, your terminal should appear as follows:
 ```(myherouno) $```
 
----
-# YEOOOO
-## Our game works on our droplet
-Check us out here!: [Such Link. Much Wow.](67.207.86.57)
-
 Install project dependencies in virtual environment:
 ```pip install -r BigBirdsRevenge/requirements.txt```
 
@@ -47,3 +42,8 @@ Run the actual program:
 Website should be found here [127.0.0.1:5000/](http://127.0.0.1:5000/)
 
 P02 for SoftDev
+
+---
+# YEOOOO
+## Our game works on our droplet
+Check us out here!: [Such Link. Much Wow.](67.207.86.57)
