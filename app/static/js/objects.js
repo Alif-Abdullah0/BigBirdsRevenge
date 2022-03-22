@@ -3,6 +3,7 @@ const objectTypeList = [
 	[0, "table", createTable, drawTable, 200],
 	[1, "chair", createChair, drawChair, 100],
 	[2, "kitchen counter", createCounter, drawCounter, 500],
+	[3, "plant", createPlant, drawPlant, 50],
 ];
 objectTypeList.sort();
 var selectedObjectIndex = -1;
@@ -147,6 +148,23 @@ function drawCounter(counter, alpha = 1.0) {
 	if (counter.food != null) {
 		// draw food
 	}
+}
+
+function createPlant(x, y) {
+	let newPlant = Object();
+	newPlant.x = x;
+	newPlant.y = y;
+	newPlant.id = 3;
+	if (Build(newPlant) == 0) {
+		return 0;
+	} else {
+		return 1;
+	}
+}
+
+function drawPlant(plant, alpha = 1.0) {
+	ctx.fillStyle = `rgba(87, 176, 0, ${alpha})`;
+	ctx.fillRect(plant.x * 25, plant.y * 25 + 20, 25, 10);
 }
 
 function deleteObject(obj) {

@@ -54,7 +54,7 @@ function nextframe() {
 		searchQueryDiv.textContent = drawGridBoolean ? 'Press 0 to search objects' : '';
 		searchResultsDiv.innerHTML = '';
 	}
-	if ((savedata.igt[0] >= 8 && savedata.igt[0] < 21) && framesTillNextMinute == 30 && Math.random() <= 0.05 * Math.pow(savedata.layout.length, 0.5) / 3) {
+	if ((savedata.igt[0] >= 8 && savedata.igt[0] < 21) && framesTillNextMinute == 30 && Math.random() <= 0.06 * Math.pow(savedata.layout.length, 0.5) / 3) {
 		for (let i = Math.trunc(Math.random() * 3) + 1; i > 0; i--) {
 			setTimeout(() => {savedata.people.push(new Customer());}, i * 1000);
 		}
@@ -223,7 +223,7 @@ document.addEventListener('keydown', (e) => {
 				}
 				searching = '';
 				searchingBoolean = false;
-				
+
 			} else {
 				queryChanged = false;
 			}
