@@ -35,6 +35,7 @@ def index():
         db.close();
         if os.path.exists(filename):
             save = True;
+        print('User: ' + session['username'], '=', save);
     return render_template("game.html",user=session.get('username'), saveavailable=save);
 
 @app.route("/login", methods=['GET','POST'])

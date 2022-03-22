@@ -79,12 +79,8 @@ function expandLoadedSave() {
 					//console.log(cust);
 				}
 				break;
-			case 0:
-			case 2:
-				objectTypeList[savelayout[i].id][2](savelayout[i].x, savelayout[i].y);
-				break;
 			default:
-				console.error("Something went wrong");
+				objectTypeList[savelayout[i].id][2](savelayout[i].x, savelayout[i].y);			
 				break;
 		}
 	}

@@ -157,6 +157,18 @@ function includesInArray(string, arr) {
 	return true;
 }
 
+function capitalizeString(s) {
+	let r = "";
+	for (let i = 0; i < s.length; i++) {
+		if (i == 0 || s.charAt(i - 1) == ' ') {
+			r += s.charAt(i).toUpperCase();
+		} else {
+			r += s.charAt(i);
+		}
+	}
+	return r;
+}
+
 function genObjectSearchResults() {
 	searchResultsDiv.innerHTML = '<hr>';
 	let terms = searching.toLowerCase().split(' ');
@@ -166,7 +178,8 @@ function genObjectSearchResults() {
 			//console.log(objectDef);
 			let newp = document.createElement('p');
 			newp.id = 'objectTypeDef_' + index;
-			newp.innerHTML = JSON.stringify(objectDef) + "&nbsp;<button>Select</button>";
+			//newp.innerHTML = JSON.stringify(objectDef) + "&nbsp;<button>Select</button>";
+			newp.innerHTML = `${capitalizeString(objectDef[1])}&nbsp;-&nbsp;Price: $${objectDef[4]}&nbsp;&nbsp;<button>Select</button>`;
 			newp.children[0].onclick = (e) => {
 				console.log(e.target.parentElement.id);
 				selectedObjectIndex = parseInt(e.target.parentElement.id.substring('objectTypeDef_'.length));

@@ -3,7 +3,8 @@ const objectTypeList = [
 	[0, "table", createTable, drawTable, 200],
 	[1, "chair", createChair, drawChair, 100],
 	[2, "kitchen counter", createCounter, drawCounter, 500],
-	[3, "plant", createPlant, drawPlant, 50],
+	[3, "cactus", createCactus, drawCactus, 50],
+	[3, "plant", createBush, drawBush, 50],
 ];
 objectTypeList.sort();
 var selectedObjectIndex = -1;
@@ -151,11 +152,25 @@ function drawCounter(counter, alpha = 1.0) {
 	}
 }
 
-function createPlant(x, y) {
-	let newPlant = Object();
-	newPlant.x = x;
-	newPlant.y = y;
-	newPlant.id = 3;
+function DecorationPrototype(x, y, id) {
+	this.x = x;
+	this.y = y;
+	this.id = id;
+	switch (id) {
+		case 0:
+			this.name = "cactus";
+			break;
+		case 4:
+			this.name = "plant";
+			break;
+		default:
+			this.name = "fuck";
+			break;
+	}
+}
+
+function createCactus(x, y) {
+	let newPlant = new DecorationPrototype(x, y, 3);
 	if (Build(newPlant) == 0) {
 		return 0;
 	} else {
@@ -163,9 +178,38 @@ function createPlant(x, y) {
 	}
 }
 
-function drawPlant(plant, alpha = 1.0) {
-	ctx.fillStyle = `rgba(87, 176, 0, ${alpha})`;
-	ctx.fillRect(plant.x * 25, plant.y * 25 + 20, 25, 10);
+function drawCactus(plant, alpha = 1.0) {
+	ctx.fillStyle = `rgba(204, 153, 102, ${alpha})`;
+	ctx.fillRect(plant.x * 25 + 8, plant.y * 25 + 19, 8, 6);
+	ctx.fillStyle = 'lawngreen';
+	ctx.fillRect(plant.x * 25 + 9, plant.y * 25 + 3, 6, 16);
+	ctx.fillRect(plant.x * 25 + 3, plant.y * 25 + 12, 8, 4);
+	ctx.fillRect(plant.x * 25 + 3, plant.y * 25 + 6, 4, 6);
+	ctx.fillRect(plant.x * 25 + 15, plant.y * 25 + 8, 6, 4);
+	ctx.fillRect(plant.x * 25 + 17, plant.y * 25 + 5, 4, 3);
+}
+
+function createBush(x, y) {
+	let newBush = new DecorationPrototype(x, y, 4);
+	if (Build(newBush) == 0) {
+		return 0;
+	} else {
+		return 1;
+	}
+}
+
+function drawBush(bush, alpha = 1.0) {
+	ctx.fillStyle = `rgba(0, 80, 0, ${alpha})`;
+	ctx.beginPath();
+	ctx.moveTo(bush.x * 25 + 10, bush.y * 25 + 24);
+	ctx.lineTo(bush.x * 25 + 15, bush.y * 25 + 24);
+	ctx.lineTo(bush.x * 25 + 16, bush.y * 25 + 17);
+	ctx.lineTo(bush.x * 25 + 9, bush.y * 25 + 17);
+	ctx.fill();
+	ctx.fillStyle = `rgba(0, 255, 0, ${alpha})`;
+	ctx.beginPath();
+	ctx.arc(bush.x * 25 + 12.5, bush.y * 25 + 12.5, 7, 0, 2 * Math.PI);
+	ctx.fill();
 }
 
 function deleteObject(obj) {
