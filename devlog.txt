@@ -41,3 +41,6 @@ Wrote code for customers to choose what to eat when they spawn. Made food dict.
 
 alifA -- 3/20/22 16:39
 Lost my sanity to the great white shark lords of Digital Ocean Droplet attempting to try and host our site on a personal droplet.
+
+alifA -- 3/22/22 05:38
+Bested the great white shark lords. Added our site to my personal Digital Ocean Droplet
