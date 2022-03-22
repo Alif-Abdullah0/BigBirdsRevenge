@@ -79,6 +79,13 @@ def signup():
         if user.isalnum() and not (' ' in passw or '\\' in passw):
             c.execute("""INSERT INTO users (username,hash) VALUES (?,?);""", (user, passw,));
             db.commit();
+            if 'currentsave' in request.form and request.form['currentsave'] != '':
+                c.execute("""SELECT ROWID FROM users WHERE username = ?;""", (user,));
+                filename = "saves/" + str(c.fetchone()[0]) + ".json";
+                f = open(filename, 'w')
+                f.write(request.form['currentsave']);
+                f.close()
+            db.close()
             return redirect('/login');
         else:
             return render_template('login.html',name='Sign Up', error='No spaces or backslashes in usernames!');
@@ -120,7 +127,7 @@ def load():
     c = db.cursor();
     c.execute("""SELECT ROWID FROM users WHERE username = ?;""", (session['username'],));
     filename = "saves/" + str(c.fetchone()[0]) + ".json";
-    db.close()
+    db.close();
     if not os.path.exists(filename):
         return Response(json.dumps({'status' : 'bad', 'message' : 'No saved game available!'}), content_type='application/json');
     f = open(filename, 'r')
