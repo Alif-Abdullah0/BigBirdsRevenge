@@ -19,7 +19,7 @@ var requestID;
 	- grid: for the grid lines
 	- people: to store the locations of the people in the restaurant
 */
-var savedata = {money : 1000, layout : [], grid : Array(600/25), people : [], igt : [7,0], counters : []};
+var savedata = {money : 1000, layout : [], grid : Array(600/25), people : [], igt : [9,0], counters : []};
 for (let i = 0; i < savedata.grid.length; i++) {
 	savedata.grid[i] = Array(800/25);
 }
@@ -37,6 +37,8 @@ var searching = '';
 
 function nextframe() {
 	ctx.clearRect(0,0,c.clientWidth,c.clientHeight);
+	ctx.fillStyle = '#ff0038';
+	ctx.fillRect(0, 8 * 25, 5 * 25, 7 * 25);
 	for (index in savedata.layout) {
 		object = savedata.layout[index];
 		objectTypeList[object.id][3](object);
@@ -52,7 +54,7 @@ function nextframe() {
 		searchQueryDiv.textContent = drawGridBoolean ? 'Press 0 to search objects' : '';
 		searchResultsDiv.innerHTML = '';
 	}
-	if (framesTillNextMinute == 30 && Math.random() <= 0.05) {
+	if ((savedata.igt[0] >= 8 && savedata.igt[0] < 21) && framesTillNextMinute == 30 && Math.random() <= 0.05 * Math.pow(savedata.layout.length, 0.5) / 3) {
 		for (let i = Math.trunc(Math.random() * 3) + 1; i > 0; i--) {
 			setTimeout(() => {savedata.people.push(new Customer());}, i * 1000);
 		}
@@ -68,7 +70,10 @@ function nextframe() {
 		dummy = "&nbsp;" + dummy;
 	}
 	moneyCounter.innerHTML = "Money:&nbsp;" + dummy;
-	timeCounter.innerHTML = "Time: " + (savedata.igt[0] < 10 ? '0' : '') + savedata.igt[0] + ':' + (savedata.igt[1] < 10 ? '0' : '') + savedata.igt[1] + " " + (savedata.igt[0] >= 7 && savedata.igt[0] < 19 ? '🌞' : '🌙');
+	timeCounter.innerHTML = "Time: " + (savedata.igt[0] < 10 ? '0' : '') + savedata.igt[0] + ':' + (savedata.igt[1] < 10 ? '0' : '') + savedata.igt[1] + " " + getTimeEmoji(savedata.igt[0]);
+	if (savedata.igt[0] < 8 || savedata.igt[0] >= 22) {
+		framesTillNextMinute = Math.min(0, framesTillNextMinute - 8);
+	}
 	if (framesTillNextMinute-- == 0) {
 		framesTillNextMinute = 60;
 		if (++savedata.igt[1] >= 60) {
@@ -123,6 +128,20 @@ function drawCursor() {
 	ctx.rect((cursorX + 1) * 25 - 7,(cursorY + 1) * 25 - 3, 8, 4);
 	ctx.rect((cursorX + 1) * 25 - 3, (cursorY + 1) * 25 - 7, 4, 8);
 	ctx.fill();
+}
+
+function getTimeEmoji(hour) {
+	if (hour <= 5) {
+		return '🌙';
+	} else if (hour <= 7) {
+		return '🌅';
+	} else if (hour < 20) {
+		return '🌞';
+	} else if (hour < 22) {
+		return '🌇';
+	} else {
+		return '🌙';
+	}
 }
 
 function ord(ch) {
@@ -230,8 +249,27 @@ document.addEventListener('keydown', (e) => {
 				case 39: /* Right */
 					cursorX = Math.min(cursorX + 1, savedata.grid[0].length - 1);
 					break;
+				case ord('E'):
+					if (selectedObjectIndex != -1) {
+						selectedObjectIndex = (selectedObjectIndex + 1) % objectTypeList.length;
+					}
+					break;
+				case ord('Q'):
+					if (selectedObjectIndex != -1) {
+						selectedObjectIndex--;
+						if (selectedObjectIndex < 0) {selectedObjectIndex = objectTypeList.length - 1;}
+					}
+					break;
 				case ord('T'):
 					drawGridBoolean = false;
+					break;
+				case ord(';'):
+					if (e.key == ':' && savedata.grid[cursorY][cursorX] != null) {
+						let obj = savedata.grid[cursorY][cursorX];
+						if (confirm(`Are you sure you want to delete the ${obj.name} at X: ${cursorX}, Y : ${cursorY} ?`)) {
+							deleteObject(obj);
+						}
+					}
 					break;
 				case ord('U'):
 					selectedObjectIndex = -1;
@@ -264,11 +302,11 @@ document.addEventListener('keydown', (e) => {
 });
 
 function startgame() {
-	createTable(5,5);
-	createChair(6,5);
-	createChair(4,5);
-	createChair(5,4);
-	createChair(5,6);
+	createTable(6,5);
+	createChair(7,5);
+	createChair(5,5);
+	createChair(6,4);
+	createChair(6,6);
 
 	createCounter(28,23);
 	createCounter(29,23);
