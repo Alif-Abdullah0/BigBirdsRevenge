@@ -18,6 +18,7 @@ async function saveRequest(s) {
 async function save() {
 	localStorage['save'] = JSON.stringify(compactSaveData());
 	localStorage['saveuser'] = user;
+	localStorage['savetime'] = new Date().getTime();
 	console.log('Saved to localStorage!');
     saveRequest(localStorage['save'])
 	.then(data => {
@@ -36,7 +37,7 @@ async function loadRequest() {
 }
 
 async function load() {
-	if ('save' in localStorage && localStorage.getItem('saveuser') === user) {
+	if ('save' in localStorage && localStorage.getItem('saveuser') === user && (user == '' || new Date().getTime() - localStorage['savetime'] < 1000 * 3600)) {
 		savedata = JSON.parse(localStorage['save']);
 		expandLoadedSave();
 		console.log('Loaded save from localStorage!');
