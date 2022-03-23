@@ -193,7 +193,24 @@ function drawBarstool(bar, alpha = 1.0) {
 	ctx.stroke();
 	ctx.fillStyle = `rgba(150,75,0,${alpha})`;
 	ctx.fill();
-	ctx.fillRect(bar.x * 25, bar.y * 25 + 15, 25, 10);
+	ctx.fillRect(bar.x * 25, bar.y * 25 + ((bar.y == 0 || savedata.grid[bar.y-1][bar.x] != null) ? 0 : 15), 25, 10);
+	if (alpha == 1.0) {
+		if (bar.y > 0 && savedata.grid[bar.y-1][bar.x] != null && savedata.grid[bar.y-1][bar.x].id == 5) {
+			ctx.beginPath();
+			ctx.moveTo(bar.x * 25 + 1, bar.y * 25);
+			ctx.lineTo(bar.x * 25 + 1, bar.y * 25 + 10);
+			ctx.lineTo(bar.x * 25 + 25, bar.y * 25 + 10);
+			ctx.lineTo(bar.x * 25 + 25, bar.y * 25);
+			ctx.stroke();
+		} else if (bar.y < 23 && savedata.grid[bar.y+1][bar.x] != null && savedata.grid[bar.y+1][bar.x].id == 5) {
+			ctx.beginPath();
+			ctx.moveTo(bar.x * 25 + 1, bar.y * 25 + 25);
+			ctx.lineTo(bar.x * 25 + 1, bar.y * 25 + 16);
+			ctx.lineTo(bar.x * 25 + 25, bar.y * 25 + 16);
+			ctx.lineTo(bar.x * 25 + 25, bar.y * 25 + 25);
+			ctx.stroke();
+		}
+	}
 }
 
 
