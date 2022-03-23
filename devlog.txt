@@ -51,3 +51,9 @@ Bested the great white shark lords. Added our site to my personal Digital Ocean 
 cameronN -- 3/22/22 9:49
 Made it so anon save data is saved once a user signs up
 also add money appear above people's heads once they get their food
+
+cameronN -- 3/22/22 11:00
+added bush
+
+cameronN -- 3/23/22 16:13
+added barstool, like chair w/ out table requirement
