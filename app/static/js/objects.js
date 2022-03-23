@@ -188,7 +188,7 @@ function createBarstool(x, y) {
 
 function drawBarstool(bar, alpha = 1.0) {
 	ctx.beginPath();
-	ctx.arc(bar.x * 25 + 12.5, bar.y * 25 + 10, 8, 0, 2 * Math.PI);
+	ctx.arc(bar.x * 25 + 12.5, bar.y * 25 + ((bar.y == 0 || savedata.grid[bar.y-1][bar.x] != null) ? 15 : 10), 8, 0, 2 * Math.PI);
 	ctx.strokeStyle = `rgba(0,0,0,${alpha})`;
 	ctx.stroke();
 	ctx.fillStyle = `rgba(150,75,0,${alpha})`;
