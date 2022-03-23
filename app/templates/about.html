@@ -1,3 +1,40 @@
 {% extends "layout.html" %}
 {% block title %} {{name}} {% endblock %}
 {% block head %} {{ super() }} <link rel='stylesheet' href='/static/css/game.css'> {% endblock %}
+
+{% block content %}
+<br> <br>
+ <img src="/static/images/bestBird.jpg" alt="Big Bird (Not Angry)" style="margin:auto;display:block;">
+ <div style="margin-left:15%;margin-right:15%;width:70%;text-align:center;">
+   <h1> Hey hey Hey! </h1>
+   <h2> It's great to be a restaurant manager at Big Birds Restaurant! </h2>
+   <br>
+   <p>
+     Our favorite feathered fellow has recently been kicked off Sesame Street for his
+     numerous crimes against humanity, including tax evasion, embezzling funds
+     from the Sesame Street production budget alongside Oscar the Grouch, and overall
+     being a public nuisance and a menace to society. Which is why he needs to raise enough
+     money to take his revenge! Assist Big Bird in his quest to right the wrongs the Sesame Street
+     Gang has inflicted on our hero.
+   </p>
+   <br>
+   <h3> But to do so, you'll need to learn a thing or two <br> about how to run a restaurant, buckaroo!</h3>
+   <ol style="text-align:left;width:45%">
+     <li> <h5> Saving and loading </h5> </li>
+     <p>
+       After a long day's work, you'd hate to lose your progress, don't you? Thankfully, the good folks
+       at Big Bird Inc. R&D have created a revolutionary time machine, allowing you to SAVE and
+       LOAD periods of time in the life span of your restaurant for you to revisit at your own leisure!
+       <br> <br>
+       Managers who have LOGGED IN are able to SAVE, LOGOUT, LOG BACK IN at some point
+       in the future, and LOAD old instances of time without breaking a sweat! If a manager does not
+       LOGIN, they can still SAVE and LOAD - their SAVES and LOADS will be stored locally, however.
+       Meaning, if they exit the game, all their precious progress is gone for good. It's a good thing lost
+       game progress feeds the hungry Big Bird!
+    </p>
+  </ol>
+</div>
+<br>
+<br>
+<br>
+{% endblock %}
