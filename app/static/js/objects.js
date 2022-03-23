@@ -4,7 +4,8 @@ const objectTypeList = [
 	[1, "chair", createChair, drawChair, 100],
 	[2, "kitchen counter", createCounter, drawCounter, 500],
 	[3, "cactus", createCactus, drawCactus, 50],
-	[3, "plant", createBush, drawBush, 50],
+	[4, "plant", createBush, drawBush, 50],
+	[5, "barstool", createBarstool, drawBarstool, 350],
 ];
 objectTypeList.sort();
 var selectedObjectIndex = -1;
@@ -45,6 +46,9 @@ function FurniturePrototype(x, y, id) {
 			break;
 		case 2:
 			this.name = "kitchen";
+			break;
+		case 5:
+			this.name = "barstool";
 			break;
 		default:
 			this.name = "fuck";
@@ -152,12 +156,53 @@ function drawCounter(counter, alpha = 1.0) {
 	}
 }
 
+function IsTableChair(id) {
+	if (id == 0 || id == 1) {
+		return true;
+	}
+	return false;
+}
+
+function createBarstool(x, y) {
+	console.log(x, y);
+	if (y > 0 && savedata.grid[y-1][x] != null && IsTableChair(savedata.grid[y-1][x].id)) {
+		return 1;
+	}
+	if (y < 23 && savedata.grid[y+1][x] != null && IsTableChair(savedata.grid[y+1][x].id)) {
+		return 1;
+	}
+	if (x > 0 && savedata.grid[y][x-1] != null && IsTableChair(savedata.grid[y][x-1].id)) {
+		return 1;
+	}
+	if (x < 31 && savedata.grid[y][x+1] != null && IsTableChair(savedata.grid[y][x+1].id)) {
+		return 1;
+	}
+	let newbar = new FurniturePrototype(x, y, 5);
+	newbar.tableOwner = '';
+	newbar.customerSitting = null;
+	if (Build(newbar) == 0) {
+		return 0;
+	}
+	return 1;
+}
+
+function drawBarstool(bar, alpha = 1.0) {
+	ctx.beginPath();
+	ctx.arc(bar.x * 25 + 12.5, bar.y * 25 + 10, 8, 0, 2 * Math.PI);
+	ctx.strokeStyle = `rgba(0,0,0,${alpha})`;
+	ctx.stroke();
+	ctx.fillStyle = `rgba(150,75,0,${alpha})`;
+	ctx.fill();
+	ctx.fillRect(bar.x * 25, bar.y * 25 + 15, 25, 10);
+}
+
+
 function DecorationPrototype(x, y, id) {
 	this.x = x;
 	this.y = y;
 	this.id = id;
 	switch (id) {
-		case 0:
+		case 3:
 			this.name = "cactus";
 			break;
 		case 4:

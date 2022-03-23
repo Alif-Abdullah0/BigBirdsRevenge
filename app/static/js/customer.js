@@ -52,10 +52,14 @@ function drawPerson(person) {
     }
 }
 
+function id_isTable(id) {
+    return id == 1 || id == 5;
+}
+
 function Customer_findTable(customer) {
     let chairlist = [];
     for (let i = 0; i < savedata.layout.length; i++) {
-        if (savedata.layout[i].id == 1 && savedata.layout[i].tableOwner != null && savedata.layout[i].customerSitting == null) {
+        if (id_isTable(savedata.layout[i].id) && savedata.layout[i].tableOwner != null && savedata.layout[i].customerSitting == null) {
             chairlist.push(savedata.layout[i]);
         }
     }

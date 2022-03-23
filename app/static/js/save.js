@@ -69,6 +69,7 @@ function expandLoadedSave() {
 		//console.log(savelayout[i]);
 		switch (savelayout[i].id) {
 			case 1:
+			case 5:
 				objectTypeList[savelayout[i].id][2](savelayout[i].x, savelayout[i].y);
 				if (savelayout[i].customerSitting != null) {
 					//console.log("customerSitting");
@@ -78,7 +79,7 @@ function expandLoadedSave() {
 					savedata.people.push(cust);
 					//console.log(cust);
 				}
-				break;
+				break;	
 			default:
 				objectTypeList[savelayout[i].id][2](savelayout[i].x, savelayout[i].y);			
 				break;
@@ -107,6 +108,17 @@ function compactSaveData() {
 					elem.customerSitting.table = null;
 				} 	
 				delete elem.tableOwner;
+				break;
+			case 5: 
+				if (elem.customerSitting != null) {
+					let saveCust = {};
+					Object.assign(saveCust, elem.customerSitting);
+					if (saveCust.gotFood == false) {
+						saveCust.orderTaken = false;
+					}
+					saveCust.table = null;
+					elem.customerSitting = saveCust;
+				} 
 				break;
 		}
 	}
