@@ -71,7 +71,7 @@ function expandLoadedSave() {
 		switch (savelayout[i].id) {
 			case 1:
 			case 5:
-				objectTypeList[savelayout[i].id][2](savelayout[i].x, savelayout[i].y);
+				objectTypeList[savelayout[i].id][2](savelayout[i].x, savelayout[i].y, true);
 				if (savelayout[i].customerSitting != null) {
 					//console.log("customerSitting");
 					let cust = savelayout[i].customerSitting;

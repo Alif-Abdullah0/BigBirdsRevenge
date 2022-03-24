@@ -71,7 +71,7 @@ function nextframe() {
 	}
 	moneyCounter.innerHTML = "Money:&nbsp;" + dummy;
 	timeCounter.innerHTML = "Time: " + (savedata.igt[0] < 10 ? '0' : '') + savedata.igt[0] + ':' + (savedata.igt[1] < 10 ? '0' : '') + savedata.igt[1] + " " + getTimeEmoji(savedata.igt[0]);
-	if (savedata.igt[0] < 8 || savedata.igt[0] >= 22) {
+	if ((savedata.igt[0] < 8 || savedata.igt[0] >= 22) && savedata.people.length == savedata.counters.length - 2) {
 		framesTillNextMinute = Math.min(0, framesTillNextMinute - 8);
 	}
 	if (framesTillNextMinute-- == 0) {

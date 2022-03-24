@@ -76,12 +76,20 @@ function Customer_findTable(customer) {
 
 
 function Customer_takeAction(customer, peopleArrayIndex) {
-    if (savedata.igt[0] >= 21) {
+    if (savedata.igt[0] >= 22 || savedata.igt[0] <= 7) {
+        /*
         if (savedata.igt[0] >= 22 && customer.table != null) {
             customer.table.customerSitting = null;
             customer.table = null;
         } // If after 22:00 customers leave whether they have tables
-        if (customer.table == null) {
+        */
+        //savedata.people.splice(peopleArrayIndex, 1);    
+        //delete customer;
+        //return; 
+
+        if (customer.table != null) {
+            customer.table.customerSitting = null;
+            customer.table = null;
             for (let i = 0; i < savedata.people.length; i++) {
                 if (savedata.people[i].personType == 'server' && savedata.people[i].customerServing == customer) {
                     savedata.people[i].customerServing = null;
@@ -89,15 +97,15 @@ function Customer_takeAction(customer, peopleArrayIndex) {
                     savedata.people[i].holding = null;
                 }
             }
-            let angle = Math.atan2(12 - customer.y, 0.5 - customer.x);
-            customer.x += 5 / 60.0 * Math.cos(angle);
-            customer.y += 5 / 60.0 * Math.sin(angle);
-            if (Math.pow(12 - customer.y, 2) + Math.pow(0.5 - customer.x, 2) <= 0.25) {
-                savedata.people.splice(peopleArrayIndex, 1);
-                delete customer;
-            }
-            return;
         }
+        let angle = Math.atan2(12 - customer.y, 0.5 - customer.x);
+        customer.x += 5 / 60.0 * Math.cos(angle);
+        customer.y += 5 / 60.0 * Math.sin(angle);
+        if (Math.pow(12 - customer.y, 2) + Math.pow(0.5 - customer.x, 2) <= 1) {
+            savedata.people.splice(peopleArrayIndex, 1);
+            delete customer;
+        }
+        return;
     }
     if (customer.table == null) {
         if (customer.tableHeading == null) {

@@ -88,7 +88,7 @@ function drawTable(table, alpha = 1.0) {
 	ctx.fillRect(table.x * 25, table.y * 25, 25, 25);
 }
 
-function createChair(x, y, forcebuild) {
+function createChair(x, y, forcebuild = false) {
 	let newchair = new FurniturePrototype(x, y, 1);
 	if (!canBuild(newchair)) {
 		return 1;
@@ -115,6 +115,7 @@ function createChair(x, y, forcebuild) {
 		newchair.tableOwner = addArray[0];
 		addArray[0].chairsAttached.push(newchair);
 	} else {
+		console.log(newchair);
 		if (!forcebuild && !confirm("This chair is not next to any table. Are you sure you want to build this?")) { return 2; }
 		newchair.tableOwner = null;
 	}
