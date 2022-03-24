@@ -136,13 +136,9 @@ def load():
     f.close();
     return Response(json.dumps({'status' : 'good', 'message' : 'Saved!', 'save' : contents}), content_type='application/json');
 
-@app.route("/surprise")
-def surprise():
-    return render_template("surprise.html")
-
 @app.route("/about")
 def about():
-    return render_template("about.html")
+    return render_template("about.html", name="Welcome Aboard!")
 
 if __name__ == "__main__":
     app.debug = True;

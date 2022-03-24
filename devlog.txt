@@ -57,3 +57,6 @@ added bush
 
 cameronN -- 3/23/22 16:13
 added barstool, like chair w/ out table requirement
+
+alifA -- 3/23/22 19:07
+created all of the how to play page, added the link to the how to play page on the navbar
